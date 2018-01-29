@@ -11,7 +11,7 @@ module.exports = React.createClass({
 				{
 					title: '是否必填字段',
 					name: 'required',
-					type: 'RadioGroup',
+					type: 'Radio',
 					value: 0,
 					data: [
 						{ text: '否', value: 0 },

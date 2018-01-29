@@ -171,7 +171,7 @@ zn.define(function () {
                 method: 'GET/POST',
                 value: function (request, response, chain){
                     var _value = request.getValue();
-                    _value.name = zn.util.pinyin(_value.title, {style: zn.util.pinyin.STYLE_NORMAL}).split(' ').join('_') + '_' +zn.util.getRandomNumbers();
+                    _value.name = zn.util.pinyin(_value.title, { noTone: true, filterChinese: true }).split(' ').join('_') + '_' +zn.util.getRandomNumbers();
                     this.beginTransaction()
                         .query(zn.sql.insert({
                             table: 'zn_plugin_survey_event_field',
@@ -219,8 +219,9 @@ zn.define(function () {
                                 };
                                 _fields.map(function(field){
                                     __fields[field.name] = {
-                                        type: JSON.parse(field.field_type),
-                                        default: ''
+                                        //type: JSON.parse(field.field_type),
+                                        type: ["varchar", 200],
+                                        default: ""
                                     };
                                 });
                                 return zn.Model(_table.table_name, {

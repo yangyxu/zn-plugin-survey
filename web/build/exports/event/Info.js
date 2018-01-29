@@ -11,7 +11,7 @@ module.exports = React.createClass({
 			formItems: [{ title: '名称', name: 'title', type: 'Input', required: true, error: '必填项!' }, {
 				title: '是否必填字段',
 				name: 'required',
-				type: 'RadioGroup',
+				type: 'Radio',
 				value: 0,
 				data: [{ text: '否', value: 0 }, { text: '是', value: 1 }]
 			}, {

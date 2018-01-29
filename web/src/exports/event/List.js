@@ -120,11 +120,15 @@ module.exports = React.createClass({
 		zn.confirm('确认发布该活动？', '提示', function () {
 			zn.http.post('/zn.plugin.survey/event/deployEvent', {
 				event_id: item.id
-			}).then(function (){
-				zn.notification.success('发布成功');
-				this.__doSuccess();
+			}).then(function (data){
+				if(data.status==200){
+					zn.notification.success('发布成功');
+					this.__doSuccess();
+				}else {
+					zn.notification.error(data.result);
+				}
 			}.bind(this), function (data){
-				zn.notification.error('发布失败: ' + data.result);
+				zn.notification.error("网络请求失败");
 			});
 		}.bind(this));
 	},
@@ -136,15 +140,19 @@ module.exports = React.createClass({
 				zn.http.post('/zn.plugin.admin/model/delete', {
 					model: this.props.model,
 					where: "id in (" + _values.join(',') + ")"
-				}).then(function (){
-					zn.toast.success('删除成功');
-					_self.state.data.refresh();
+				}).then(function (data){
+					if(data.status==200){
+						zn.toast.success('删除成功');
+						_self.state.data.refresh();
+					}else {
+						zn.toast.success(data.result);
+					}
 				}, function (data){
-					zn.toast.error('删除失败: ' + data.result);
+					zn.toast.error("网络请求失败");
 				});
 			}.bind(this));
 		}else {
-			zn.toast.warning('请先选择要删除的用户');
+			zn.toast.warning('请先选择要删除的活动');
 		}
 	},
 	__onToolbarClick: function (item){
