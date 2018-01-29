@@ -1,0 +1,11 @@
+zn.define([
+    './ZNPluginSurveyEvent',
+    './ZNPluginSurveyEventField',
+    './ZNPluginSurveyEventType',
+    './ZNPluginSurveyPaper',
+    './ZNPluginSurveyPaperType',
+    './ZNPluginSurveyPaperAnswer',
+    './ZNPluginSurveyPaperTopic',
+    './ZNPluginSurveyPaperTopicItem',
+    './ZNPluginSurveyUser'
+]);

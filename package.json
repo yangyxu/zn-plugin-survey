@@ -1,0 +1,33 @@
+{
+  "name": "zn-plugin-survey",
+  "version": "0.1.1",
+  "description": "前端基于zeanium-react-web框架, 后端基于zeanium-node框架的后台管理平台模块",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel ./web/src -d ./web/build",
+    "dist": "webpack",
+    "release": "npm run build & npm run dist",
+    "install.release": "npm install --production",
+    "install.dev": "npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yangyxu/zn-plugin-survey.git"
+  },
+  "keywords": [
+    "plugin",
+    "zn",
+    "zn-plugin",
+    "survey"
+  ],
+  "author": "yangyxu",
+  "license": "MIT",
+  "devDependencies": {
+    "zeanium-react-web": "^0.1.33"
+  },
+  "dependencies": {
+    "officegen": "^0.4.5",
+    "qrcode.react": "^0.7.2",
+    "xlsx": "^0.11.7"
+  }
+}
