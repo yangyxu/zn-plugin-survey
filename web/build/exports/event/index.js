@@ -1,3 +1,3 @@
-module.exports = zn.arrayValueToObject(['Type', 'List', 'Submit', 'Info'], function (value, index) {
+module.exports = zn.arrayValueToObject(['Type', 'List', 'Result', 'Submit', 'Info'], function (value, index) {
     return require('./' + value + '.js');
 });

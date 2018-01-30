@@ -49,7 +49,7 @@ module.exports = React.createClass({
 		}
 	},
 	__viewEventChart: function (item){
-
+		zn.react.session.relativeJump('/znpluginsurvey.event.result', { event_uuid: item.zn_id });
 	},
 	__onItemRender: function (item){
 		return <div className="inner">

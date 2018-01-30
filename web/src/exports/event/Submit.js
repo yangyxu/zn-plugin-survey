@@ -31,8 +31,14 @@ module.exports = React.createClass({
 						return item;
 					});
 				}
+
 				window.document.title = _data.event.zn_title;
-				this.setState(_data);
+				this.setState({
+					event: _data.event,
+					fields: _data.fields,
+					error: _data.error,
+					data: _data.data
+				});
 			}else {
 				this.setState({
 					error: data.result
@@ -99,6 +105,7 @@ module.exports = React.createClass({
 	__renderResult: function (){
 		return (
 			<div className="submit-form">
+				<div className="zr-tip">{this.state.event.success_message}</div>
 				<div className="count-info">还剩<span className="count">{this.state.event.max_count - this.state.event.count}</span>个名额</div>
 				<ul className="field-value">
 					{

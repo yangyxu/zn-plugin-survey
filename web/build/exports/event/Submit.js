@@ -33,8 +33,14 @@ module.exports = React.createClass({
 						return item;
 					});
 				}
+
 				window.document.title = _data.event.zn_title;
-				this.setState(_data);
+				this.setState({
+					event: _data.event,
+					fields: _data.fields,
+					error: _data.error,
+					data: _data.data
+				});
 			} else {
 				this.setState({
 					error: data.result
@@ -120,6 +126,11 @@ module.exports = React.createClass({
 		return React.createElement(
 			'div',
 			{ className: 'submit-form' },
+			React.createElement(
+				'div',
+				{ className: 'zr-tip' },
+				this.state.event.success_message
+			),
 			React.createElement(
 				'div',
 				{ className: 'count-info' },

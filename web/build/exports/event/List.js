@@ -53,7 +53,9 @@ module.exports = React.createClass({
 				);
 		}
 	},
-	__viewEventChart: function __viewEventChart(item) {},
+	__viewEventChart: function __viewEventChart(item) {
+		zn.react.session.relativeJump('/znpluginsurvey.event.result', { event_uuid: item.zn_id });
+	},
 	__onItemRender: function __onItemRender(item) {
 		var _this = this;
 

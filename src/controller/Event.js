@@ -128,6 +128,39 @@ zn.define(['node:chinese-to-pinyin'], function (node_pinyin) {
                         }).commit();
                 }
             },
+            pagingEventResult: {
+                method: 'GET/POST',
+                argv: {
+                    event_uuid: null
+                },
+                value: function (request, response, chain){
+                    var _event_uuid = request.getValue('event_uuid');
+                    var _values = request.getValue();
+                    var _data = {};
+                    this.beginTransaction()
+                        .query(zn.sql.select({
+                            table: 'zn_plugin_survey_event',
+                            where: {
+                                zn_id: _event_uuid
+                            }
+                        }))
+                        .query('Select Field', function (sql, data){
+                            if(!data[0]){
+                                return response.error('未查到该活动'), false;
+                            }else {
+                                _values.table = data[0].table_name;
+                                return zn.sql.paging(_values);
+                            }
+                        }, function (err, data){
+                            if(err){
+                                response.error(err);
+                            }else {
+                                response.success(data);
+                            }
+                        })
+                        .commit();
+                }
+            },
             getEventFields: {
                 method: 'GET/POST',
                 argv: {
@@ -158,7 +191,7 @@ zn.define(['node:chinese-to-pinyin'], function (node_pinyin) {
                             }
                         }, function (err, data){
                             if(err){
-                                return response.error(err), false;
+                                response.error(err);
                             }else {
                                 _data.fields = data;
                                 response.success(_data);
