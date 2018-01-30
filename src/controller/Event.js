@@ -1,4 +1,4 @@
-zn.define(function () {
+zn.define(['node:chinese-to-pinyin'], function (node_pinyin) {
 
     return zn.Controller('event',{
         methods: {
@@ -171,7 +171,7 @@ zn.define(function () {
                 method: 'GET/POST',
                 value: function (request, response, chain){
                     var _value = request.getValue();
-                    _value.name = zn.util.pinyin(_value.title, { noTone: true, filterChinese: true }).split(' ').join('_') + '_' +zn.util.getRandomNumbers();
+                    _value.name = node_pinyin(_value.title, { noTone: true, filterChinese: true }).split(' ').join('_') + '_' +zn.util.getRandomNumbers();
                     this.beginTransaction()
                         .query(zn.sql.insert({
                             table: 'zn_plugin_survey_event_field',

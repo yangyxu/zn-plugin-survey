@@ -31,7 +31,7 @@ module.exports = React.createClass({
 						return item;
 					});
 				}
-
+				window.document.title = _data.event.zn_title;
 				this.setState(_data);
 			}else {
 				this.setState({
