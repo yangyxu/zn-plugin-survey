@@ -148,14 +148,19 @@ module.exports = React.createClass({
 				}
 				{
 					this.state.event && <div className="event-fields">
-						<zn.react.Button onClick={this.__addItem} text="添加字段" icon="fa-plus" />
 						{
-							!!this.state.fields.length ? <ul className="fields">
-								{
-									this.state.fields.map(this.__itemRender)
-								}
-							</ul>: <span className="zr-tip">暂时没有字段</span>
+							this.state.event.background_image && <img className="background-image" src={this.state.event.background_image} />
 						}
+						<div className="content">
+							<zn.react.Button onClick={this.__addItem} text="添加字段" icon="fa-plus" />
+							{
+								!!this.state.fields.length ? <ul className="fields">
+									{
+										this.state.fields.map(this.__itemRender)
+									}
+								</ul>: <span className="zr-tip">暂时没有字段</span>
+							}
+						</div>
 					</div>
 				}
 			</zn.react.Page>

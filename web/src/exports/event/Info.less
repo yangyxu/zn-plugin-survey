@@ -13,31 +13,44 @@
     }
 
     .event-fields{
+        position: relative;
         margin: 10px;
-        padding: 10px;
-        background-color: #FFF;
-        border-radius: 3px;
-        .fields{
-            padding: 10px;
-            margin-top: 20px;
-            .field{
-                display: flex;
-                .zr-form-item{
-                    flex: 1;
-                }
-                .action{
-                    width: 80px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: 16px;
-                    font-weight: 400;
-                    .fa{
-                        padding: 10px;
-                        cursor: pointer;
-                    }
-                }
+        *{
+            color: #FFF !important;
+        }
+        &, .background-image{
+            border-radius: 3px;
 
+        }
+        .background-image{
+            z-index: 0;
+        }
+        .content{
+            margin: 10px;
+            padding: 10px;
+            .fields{
+                padding: 10px;
+                margin-top: 20px;
+                .field{
+                    display: flex;
+                    .zr-form-item{
+                        flex: 1;
+                    }
+                    .action{
+                        z-index: 1;
+                        width: 80px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 16px;
+                        font-weight: 400;
+                        .fa{
+                            padding: 10px;
+                            cursor: pointer;
+                        }
+                    }
+
+                }
             }
         }
     }

@@ -22,6 +22,11 @@ module.exports = React.createClass({
 						width: field.width
 					}
 				});
+				_data.fields.unshift({
+					title: '微信账号',
+					name: 'openid_convert',
+					width: 200
+				});
 				_data.fields.push({
 					title: '提交时间',
 					name: 'zn_create_time',
@@ -81,9 +86,10 @@ module.exports = React.createClass({
 	__onTableColumnRender: function (rowIndex, columnIndex, data, item, value){
 		switch (columnIndex) {
 			case 1:
+				var _value = value.split('&&__zn__&&');
 				return <div style={{ display: 'flex', alignItems: 'center' }}>
-					{data.avatar_img && <img className="avatar" style={{ width: 16, height: 16, margin: 5, borderRadius: 16 }} src={data.avatar_img} />}
-					<a href={'#'+zn.react.session.fixPath('/znpluginadmin.user.infoedit')+'?userId=' + data.id}>{value}</a>
+					{_value[1] && <img className="avatar" style={{ width: 16, height: 16, margin: 5, borderRadius: 16 }} src={_value[1]} />}
+					<a>{_value[0]}</a>
 				</div>;
 		}
 	},

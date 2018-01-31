@@ -85,6 +85,11 @@ zn.define(function () {
                 value: null,
                 type: ['varchar', 1000],
                 default: ''
+            },
+            background_image: {
+                value: null,
+                type: ['varchar', 100],
+                default: ''
             }
         }
     });

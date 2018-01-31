@@ -1,4 +1,4 @@
-zn.define(['node:chinese-to-pinyin'], function (node_pinyin) {
+zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, node_officegen) {
 
     return zn.Controller('event',{
         methods: {
@@ -149,6 +149,7 @@ zn.define(['node:chinese-to-pinyin'], function (node_pinyin) {
                                 return response.error('未查到该活动'), false;
                             }else {
                                 _values.table = data[0].table_name;
+                                _values.fields = "*, zn_plugin_survey_convert_openid(zn_plugin_wechat_open_id) as openid_convert"
                                 return zn.sql.paging(_values);
                             }
                         }, function (err, data){
@@ -156,6 +157,64 @@ zn.define(['node:chinese-to-pinyin'], function (node_pinyin) {
                                 response.error(err);
                             }else {
                                 response.success(data);
+                            }
+                        })
+                        .commit();
+                }
+            },
+            downloadEventResult: {
+                method: 'GET/POST',
+                argv: {
+                    event_uuid: null
+                },
+                value: function (request, response, chain){
+                    var _event_uuid = request.getValue('event_uuid');
+                    var _values = request.getValue();
+                    var _data = {};
+                    this.beginTransaction()
+                        .query(zn.sql.select({
+                            table: 'zn_plugin_survey_event',
+                            where: {
+                                zn_id: _event_uuid
+                            }
+                        }))
+                        .query('Select Field', function (sql, data){
+                            if(!data[0]){
+                                return response.error('未查到该活动'), false;
+                            }else {
+                                _data.event = data[0];
+                                return zn.sql.select({
+                                    table: _data.event.table_name
+                                }) + zn.sql.select({
+                                    table: 'zn_plugin_survey_event_field',
+                                    where: { event_id: _data.event.id }
+                                });
+                            }
+                        }, function (err, data){
+                            if(err){
+                                response.error(err);
+                            }else {
+                                var _rows = data[0], _fields = data[1], _fk = [];
+                                var _xlsx = node_officegen('xlsx'),
+                                    _sheet0 = _xlsx.makeNewSheet();
+                                _sheet0.name = _data.event.zn_title;
+                                _sheet0.data[0] = [];
+                                _fields.push({title: '提交时间', name: 'zn_create_time'})
+                                _fields.forEach(function (field){
+                                    _sheet0.data[0].push(field.title);
+                                    _fk.push(field.name);
+                                });
+                                _rows.forEach(function (row, index){
+                                    _sheet0.data.push(_fk.map(function (key){
+                                        return row[key];
+                                    }));
+                                });
+
+                                response.writeHead(200, {
+                				    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                				    'Content-disposition': 'attachment; filename='+_data.event.table_name+'_data.xlsx'
+                				});
+                                _xlsx.generate(response._serverResponse);
                             }
                         })
                         .commit();

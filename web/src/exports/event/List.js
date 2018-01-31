@@ -13,6 +13,7 @@ module.exports = React.createClass({
 				{ title: '结束时间', name: 'end_time', type: 'Input', attrs: { type:'date' } },
 				{ title: '成功消息', name: 'success_message', type: 'RichEditor' },
 				{ title: '失败消息', name: 'error_message', type: 'RichEditor' },
+				{ title: '背景图片', name: 'background_image', type: 'ImageUploader' },
 				{ title: '附件', name: 'attachments', type: 'FileUploader' },
 				{ title: '备注', name: 'comment', type: 'Textarea' },
 				{ title: '说明', name: 'zn_note', type: 'Textarea' }
@@ -51,6 +52,9 @@ module.exports = React.createClass({
 	__viewEventChart: function (item){
 		zn.react.session.relativeJump('/znpluginsurvey.event.result', { event_uuid: item.zn_id });
 	},
+	__viewEventChart: function (item){
+		zn.react.session.relativeJump('/znpluginsurvey.event.result', { event_uuid: item.zn_id });
+	},
 	__onItemRender: function (item){
 		return <div className="inner">
 			<div className="inner-left" style={{width: 80}}>
@@ -68,7 +72,10 @@ module.exports = React.createClass({
 						}
 						{this.__renderStatus(item.status)}
 					</span>
-					<i data-tooltip="修改信息" onClick={()=>this.__updateItem(item)} className="fa fa-edit h-btn" />
+					<i data-tooltip="修改信息" onClick={()=>this.__updateItem(item)} className="fa fa-edit zr-fr zr-padding-3" />
+					{
+						!(item.status==0) && <a className="zr-fr zr-padding-3" target="_self" href={zn.http.fixURL('/zn.plugin.survey/event/downloadEventResult') + "?event_uuid=" + item.zn_id}><i data-tooltip="导出数据" className="fa fa-download" /></a>
+					}
 				</div>
 				<div className="r-item">
 					<span className="_key">当前进度</span>
