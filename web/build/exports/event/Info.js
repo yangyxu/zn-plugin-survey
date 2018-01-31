@@ -208,15 +208,20 @@ module.exports = React.createClass({
 			this.state.event && React.createElement(
 				'div',
 				{ className: 'event-fields' },
-				React.createElement(zn.react.Button, { onClick: this.__addItem, text: '\u6DFB\u52A0\u5B57\u6BB5', icon: 'fa-plus' }),
-				!!this.state.fields.length ? React.createElement(
-					'ul',
-					{ className: 'fields' },
-					this.state.fields.map(this.__itemRender)
-				) : React.createElement(
-					'span',
-					{ className: 'zr-tip' },
-					'\u6682\u65F6\u6CA1\u6709\u5B57\u6BB5'
+				this.state.event.background_image && React.createElement('img', { className: 'background-image', src: this.state.event.background_image }),
+				React.createElement(
+					'div',
+					{ className: 'content' },
+					React.createElement(zn.react.Button, { onClick: this.__addItem, text: '\u6DFB\u52A0\u5B57\u6BB5', icon: 'fa-plus' }),
+					!!this.state.fields.length ? React.createElement(
+						'ul',
+						{ className: 'fields' },
+						this.state.fields.map(this.__itemRender)
+					) : React.createElement(
+						'span',
+						{ className: 'zr-tip' },
+						'\u6682\u65F6\u6CA1\u6709\u5B57\u6BB5'
+					)
 				)
 			)
 		);
