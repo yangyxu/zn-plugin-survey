@@ -13,6 +13,11 @@ zn.define(function () {
                 type: ['int', 11],
                 default: 0
             },
+            table_id: {
+                value: null,
+                type: ['int', 11],
+                default: 0
+            },
             repeat_verify: {
                 value: null,
                 type: ['int', 4],
@@ -26,7 +31,7 @@ zn.define(function () {
             field_type: {
                 value: null,
                 type: ['varchar', 100],
-                default: '["varchat", 100]'
+                default: '["varchat", 200]'
             },
             field_convert: {
                 value: null,

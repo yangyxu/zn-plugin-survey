@@ -8,9 +8,10 @@ module.exports = React.createClass({
 			data: zn.store.post('/zn.plugin.survey/event/getEventsByType', { type: this.props.data?this.props.data.value:null, status: 0 }),
 			formItems: [
 				{ title: '活动名称', name: 'zn_title', type: 'Input', required: true, error: '名称必填项!' },
+				{ title: '表结构', name: 'table_multi', type: 'Radio', value: 0, data: [{value: 0, text: '单表'},{value: 1, text: '多表'}], required: true },
 				{ title: '最大限制', name: 'max_count', type: 'Input', attrs: { type: 'number' } },
-				{ title: '开始时间', name: 'start_time', type: 'Input', attrs: { type:'date' } },
-				{ title: '结束时间', name: 'end_time', type: 'Input', attrs: { type:'date' } },
+				{ title: '开始时间', name: 'start_time', type: 'DateTime', attrs: { type:'date' }, required: true },
+				{ title: '结束时间', name: 'end_time', type: 'DateTime', attrs: { type:'date' }, required: true },
 				{ title: '成功消息', name: 'success_message', type: 'RichEditor' },
 				{ title: '失败消息', name: 'error_message', type: 'RichEditor' },
 				{ title: '背景图片', name: 'background_image', type: 'ImageUploader' },
@@ -43,14 +44,9 @@ module.exports = React.createClass({
 				return <span>待发布</span>;
 			case 1:
 				return <span style={{color:'green'}}>已发布</span>;
-			case 2:
-				return <span style={{color:'red'}}>已结束</span>;
 			case -1:
-				return <span>下线</span>;
+				return <span style={{color:'red'}}>已结束</span>;
 		}
-	},
-	__viewEventChart: function (item){
-		zn.react.session.relativeJump('/znpluginsurvey.event.result', { event_uuid: item.zn_id });
 	},
 	__viewEventChart: function (item){
 		zn.react.session.relativeJump('/znpluginsurvey.event.result', { event_uuid: item.zn_id });
@@ -88,10 +84,6 @@ module.exports = React.createClass({
 				<div className="r-item">
 					<span className="_key">创建时间：</span>
 					<span className="_value">{item.zn_create_time}</span>
-				</div>
-				<div className="r-item">
-					<span className="_key">备注：</span>
-					<span className="_value">{item.comment}</span>
 				</div>
 			</div>
 		</div>;
@@ -184,7 +176,7 @@ module.exports = React.createClass({
 					data={[
 						{ status: 0, text: '待发布' },
 						{ status: 1, text: '已发布' },
-						{ status: 2, text: '已结束' }
+						{ status: -1, text: '已结束' }
 					]} />} >
 				<zn.react.PagerView
 					view="ListView"

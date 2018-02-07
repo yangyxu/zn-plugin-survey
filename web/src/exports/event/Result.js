@@ -89,7 +89,7 @@ module.exports = React.createClass({
 				var _value = value.split('&&__zn__&&');
 				return <div style={{ display: 'flex', alignItems: 'center' }}>
 					{_value[1] && <img className="avatar" style={{ width: 16, height: 16, margin: 5, borderRadius: 16 }} src={_value[1]} />}
-					<a>{_value[0]}</a>
+					<a onClick={()=>zn.react.session.relativeJump('/znpluginwechat.user.info', { openid: data.zn_plugin_wechat_open_id })}>{_value[0]}</a>
 				</div>;
 		}
 	},

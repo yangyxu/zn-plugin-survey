@@ -6,8 +6,7 @@ module.exports = React.createClass({
 			event: null,
 			fields: null,
 			error: null,
-			data: null,
-			toolbarItems: [{text:'提交报名', name:'submit', icon: 'fa-hand-pointer-o'}]
+			data: null
 		}
 	},
 	componentDidMount: function (){
@@ -26,11 +25,25 @@ module.exports = React.createClass({
 				if(_data.fields){
 					_data.fields = _data.fields.map(function (item, index){
 						if(item.data){
-							item.data = eval(item.data);
+							try {
+								if(item.data[0] == '[' && item.data[item.data.length-1] == ']'){
+									item.data = JSON.parse(item.data);
+								}else if(item.data.indexOf(' ')!=-1) {
+									item.data = item.data.split(' ');
+								}
+							} catch (e) {
+								console.error(e);
+							}
 						}
+						if(item.attrs){
+							item.attrs = JSON.parse(item.attrs);
+						}
+						item.type = item.type.split('_')[0];
 						return item;
 					});
 				}
+
+				console.log(_data.event.zn_title);
 
 				window.document.title = _data.event.zn_title;
 				this.setState({
@@ -49,13 +62,6 @@ module.exports = React.createClass({
 			zn.toast.error('请求网络失败');
 			zn.preloader.close();
 		});
-	},
-	__onToolbarClick: function (item){
-		switch (item.name) {
-			case 'submit':
-				this.refs.form.submit();
-				break;
-		}
 	},
 	__renderError: function (error){
 		return (
@@ -95,17 +101,20 @@ module.exports = React.createClass({
 				<zn.react.Form
 					ref="form"
 					merge="data"
+					className="form"
+					itemClassName="column"
 					action='/zn.plugin.survey/event/submitEvent'
 					items={this.state.fields}
 					onSubmitBefore={this.__onSubmit}
 					buttons={[]} />
+				<zn.react.Button onClick={()=>this.refs.form.submit()} text="确认提交" icon="fa-hand-pointer-o" status="warning" />
 			</div>
 		);
 	},
 	__renderResult: function (){
 		return (
 			<div className="submit-form">
-				<div className="zr-tip">{this.state.event.success_message}</div>
+				<div className="success">{this.state.event.success_message}</div>
 				<div className="count-info">还剩<span className="count">{this.state.event.max_count - this.state.event.count}</span>个名额</div>
 				<ul className="field-value">
 					{
@@ -126,6 +135,7 @@ module.exports = React.createClass({
 		if(this.state.error){
 			return this.__renderError(this.state.error);
 		}
+
 		if(this.state.fields){
 			return this.__renderForm();
 		}
@@ -137,9 +147,18 @@ module.exports = React.createClass({
 	},
 	render:function(){
 		return (
-			<zn.react.Page canBack={false} className="zn-plugin-survey-event-submit" title={this.state.event?this.state.event.zn_title:'加载中...'} toolbarItems={this.state.fields?this.state.toolbarItems:[]} onToolbarClick={this.__onToolbarClick} >
-				{this.__renderContent()}
-			</zn.react.Page>
+			<div className="zn-plugin-survey-event-submit">
+
+				{
+					this.state.event && <img className="inner-bg" src={zn.http.fixURL(this.state.event.background_image)} />
+				}
+				<div className="inner-content">
+					{
+						this.state.event && <div className="inner-title">{this.state.event.zn_title}</div>
+					}
+					{this.__renderContent()}
+				</div>
+			</div>
 		);
 	}
 });

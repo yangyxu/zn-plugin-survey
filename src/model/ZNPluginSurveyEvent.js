@@ -18,11 +18,6 @@ zn.define(function () {
                 type: ['int', 11],
                 default: 0
             },
-            parent_id: {
-                value: null,
-                type: ['int', 11],
-                default: 0
-            },
             max_count: {
                 value: null,
                 type: ['int', 11],
@@ -49,6 +44,11 @@ zn.define(function () {
                 default: ''
             },
             table_generated: {
+                value: null,
+                type: ['int', 4],
+                default: 0
+            },
+            table_multi: {
                 value: null,
                 type: ['int', 4],
                 default: 0

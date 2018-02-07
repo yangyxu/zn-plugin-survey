@@ -10,8 +10,8 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                 },
                 value: function (request, response, chain){
                     var _openid = request.getValue('openid'),
-                        _event_uuid = request.getValue('event_uuid');
-                    var _data = {}
+                        _event_uuid = request.getValue('event_uuid'),
+                        _data = {};
                     this.beginTransaction()
                         .query(zn.sql.select({
                             table: 'zn_plugin_survey_event',
@@ -21,13 +21,23 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                             if(!data[0]){
                                 return response.error('未查到该活动'), false;
                             }
-                            _data.event = data[0];
+                            var _event = _data.event = data[0];
+                            if(_event.start_time || _event.end_time){
+                                var _now = (new Date()).getTime()
+                                if(_now>(new Date(_event.end_time)).getTime()){
+                                    return response.error('活动已经结束'), false;
+                                }
+                                if(_now<(new Date(_event.start_time)).getTime()){
+                                    return response.error('活动还没开始'), false;
+                                }
+                            }
+
                             if(!_data.event.table_generated){
-                                return response.error('该活动还未发布或已经结束'), false;
+                                return response.error('活动还未发布'), false;
                             }
 
                             if(_data.event.count == _data.event.max_count){
-                                return response.error('该活动提交已满'), false;
+                                return response.error('活动提交已满'), false;
                             }
 
                             return zn.sql.select({
@@ -263,7 +273,15 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                 method: 'GET/POST',
                 value: function (request, response, chain){
                     var _value = request.getValue();
+                    /*
                     _value.name = node_pinyin(_value.title, { noTone: true, filterChinese: true }).split(' ').join('_') + '_' +zn.util.getRandomNumbers();
+                    _value.name = _value.replace(/\(/g, '_');
+                    _value.name = _value.replace(/\)/g, '_');
+                    _value.name = _value.replace(/\:/g, '_');
+                    _value.name = _value.replace(/\,/g, '_');
+                    _value.name = _value.replace(/\,/g, '_');
+                    */
+                    _value.name = "zn_table_field_name_" + zn.util.getRandomNumbers();
                     this.beginTransaction()
                         .query(zn.sql.insert({
                             table: 'zn_plugin_survey_event_field',
@@ -343,7 +361,13 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                 },
                 value: function (request, response, chain){
                     var _type = request.getValue('type'),
-                        _where = ['zn_deleted=0 and parent_id=0 and status=' + request.getValue('status') ];
+                        _status = request.getValue('status'),
+                        _where = ['zn_deleted=0 and parent_id=0'];
+                    if(_status != -1){
+                        _where.push(' and status=' + _status);
+                    }else {
+                        _where.push(' and status=1 and UNIX_TIMESTAMP(end_time)<UNIX_TIMESTAMP(now())');
+                    }
                     if(_type){
                         _where.push(' and type_id=' + _type);
                     }
