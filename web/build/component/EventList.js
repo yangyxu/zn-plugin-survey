@@ -66,7 +66,7 @@ module.exports = React.createClass({
 			React.createElement(
 				'div',
 				{ className: 'inner-left', style: { width: 80 } },
-				React.createElement(zn.react.ProgressRing, { style: { margin: "0 auto" }, full: false, value: item.count / item.max_count * 100 }),
+				React.createElement(zn.react.ProgressRing, { style: { margin: "0 auto" }, full: false, value: (item.count / item.max_count * 100).toFixed(1) }),
 				!(item.status == 0) ? React.createElement(
 					'span',
 					{ onClick: function onClick() {
@@ -88,24 +88,6 @@ module.exports = React.createClass({
 								return zn.react.session.relativeJump('/znpluginsurvey.event.info', { znid: item.zn_id });
 							} },
 						item.zn_title
-					),
-					React.createElement(
-						'span',
-						{ className: 'h-tag' },
-						!!(item.status == 0) ? React.createElement('i', { 'data-tooltip': '\u90E8\u7F72', onClick: function onClick() {
-								return _this.__deployItem(item);
-							}, className: 'fa fa-telegram zr-padding-3' }) : React.createElement('i', { 'data-tooltip': '\u91CD\u65B0\u53D1\u5E03', onClick: function onClick() {
-								return _this.__deployItem(item);
-							}, className: 'fa fa-telegram zr-padding-3' }),
-						this.__renderStatus(item.status)
-					),
-					React.createElement('i', { 'data-tooltip': '\u4FEE\u6539\u4FE1\u606F', onClick: function onClick() {
-							return _this.__updateItem(item);
-						}, className: 'fa fa-edit zr-fr zr-padding-3' }),
-					!(item.status == 0) && React.createElement(
-						'a',
-						{ className: 'zr-fr zr-padding-3', target: '_self', href: zn.http.fixURL('/zn.plugin.survey/event/downloadEventResult') + "?event_uuid=" + item.zn_id },
-						React.createElement('i', { 'data-tooltip': '\u5BFC\u51FA\u6570\u636E', className: 'fa fa-download' })
 					)
 				),
 				React.createElement(
@@ -157,6 +139,41 @@ module.exports = React.createClass({
 						{ className: '_value' },
 						item.zn_create_time
 					)
+				),
+				React.createElement(
+					'div',
+					{ className: 'r-item' },
+					React.createElement(
+						'span',
+						{ className: 'h-tag zr-fl' },
+						!!(item.status == 0) ? React.createElement('i', { 'data-tooltip': '\u90E8\u7F72', onClick: function onClick() {
+								return _this.__deployItem(item);
+							}, className: 'fa fa-telegram zr-padding-3' }) : React.createElement('i', { 'data-tooltip': '\u91CD\u65B0\u53D1\u5E03', onClick: function onClick() {
+								return _this.__deployItem(item);
+							}, className: 'fa fa-telegram zr-padding-3' }),
+						this.__renderStatus(item.status)
+					),
+					React.createElement(
+						'i',
+						{ onClick: function onClick() {
+								return _this.__removeItem(item);
+							}, style: { color: '#d9534f' }, className: 'fa fa-remove zr-fr zr-padding-3 zr-margin-3' },
+						'\u5220\u9664'
+					),
+					React.createElement(
+						'i',
+						{ onClick: function onClick() {
+								return _this.__updateItem(item);
+							}, style: { color: '#9b59b6' }, className: 'fa fa-edit zr-fr zr-padding-3 zr-margin-3' },
+						'\u4FEE\u6539'
+					),
+					!(item.status == 0) && React.createElement(
+						'i',
+						{ style: { color: '#9b59b6' }, onClick: function onClick() {
+								return zn.react.downloadURL(zn.http.fixURL('/zn.plugin.survey/event/downloadEventResult') + "?event_uuid=" + item.zn_id);
+							}, className: 'fa zr-fr fa-download zr-padding-3 zr-margin-3' },
+						'\u5BFC\u51FA\u4E3AExcel'
+					)
 				)
 			)
 		);
@@ -204,28 +221,28 @@ module.exports = React.createClass({
 			});
 		}.bind(this));
 	},
-	__removeItems: function __removeItems() {
-		var _self = this,
-		    _values = this.refs.table.getValue();
-		if (_values && _values.length) {
-			zn.confirm('确认删除这' + _values.length + '个用户吗？', '提示', function () {
-				zn.http.post('/zn.plugin.admin/model/delete', {
-					model: this.props.model,
-					where: "id in (" + _values.join(',') + ")"
-				}).then(function (data) {
-					if (data.status == 200) {
-						zn.toast.success('删除成功');
-						_self.state.data.refresh();
-					} else {
-						zn.toast.success(data.result);
-					}
-				}, function (data) {
-					zn.toast.error("网络请求失败");
-				});
-			}.bind(this));
-		} else {
-			zn.toast.warning('请先选择要删除的活动');
-		}
+	__removeItem: function __removeItem(item) {
+		var _self = this;
+		zn.confirm('确认删除活动【' + item.zn_title + '】吗？', '提示', function () {
+			zn.preloader.open({
+				content: '删除中...'
+			});
+			zn.http.post('/zn.plugin.admin/model/delete', {
+				model: this.state.model,
+				where: { zn_id: item.zn_id }
+			}).then(function (data) {
+				if (data.status == 200) {
+					zn.toast.success('删除成功');
+					_self.state.data.refresh();
+				} else {
+					zn.toast.error(data.result);
+				}
+				zn.preloader.close();
+			}, function (data) {
+				zn.toast.error("网络请求失败");
+				zn.preloader.close();
+			});
+		}.bind(this));
 	},
 	__onToolbarClick: function __onToolbarClick(item) {
 		switch (item.name) {

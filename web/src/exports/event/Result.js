@@ -3,7 +3,12 @@ module.exports = React.createClass({
 	getInitialState: function () {
 		return {
 			event: null,
-			fields: null
+			fields: null,
+			data: null,
+			toolbarItems: [
+				{ text: '批量删除', name: 'remove', status: 'danger', icon: 'fa-remove', style: { marginRight: 5 } },
+				{ text: '导出为Excel', name: 'exports', status: 'warning', icon: 'fa-download', style: { marginRight: 5 } }
+			]
 		}
 	},
 	componentDidMount: function (){
@@ -22,7 +27,7 @@ module.exports = React.createClass({
 						width: field.width
 					}
 				});
-				_data.fields.unshift({
+				_data.fields.push({
 					title: '微信账号',
 					name: 'openid_convert',
 					width: 200
@@ -32,6 +37,7 @@ module.exports = React.createClass({
 					name: 'zn_create_time',
 					width: 130
 				});
+				_data.data = zn.store.post('/zn.plugin.survey/event/pagingEventResult', { event_uuid: _data.event.zn_id });
 				this.setState(_data);
 			}else {
 				zn.notification.error(data.result);
@@ -59,14 +65,24 @@ module.exports = React.createClass({
 			_values = this.refs.table.getValue();
 		if(_values && _values.length){
 			zn.confirm('确认删除这' + _values.length + '个用户吗？', '提示', function () {
-				zn.http.post('/zn.plugin.admin/model/delete', {
-					model: this.props.model,
-					where: "id in (" + _values.join(',') + ")"
-				}).then(function (){
-					zn.toast.success('删除成功');
-					_self.state.data.refresh();
+				zn.preloader.open({
+					content: '删除中...'
+				});
+				zn.http.post('/zn.plugin.survey/event/deleteEventResult', {
+					event_uuid: this.state.event.zn_id,
+					ids: _values.join(',')
+				}).then(function (data){
+					if(data.status==200){
+						zn.toast.success('删除成功');
+						_self.refs.table.setValue([]);
+						_self.state.data.refresh();
+					}else {
+						zn.toast.error(data.result);
+					}
+					zn.preloader.close();
 				}, function (data){
-					zn.toast.error('删除失败: ' + data.result);
+					zn.toast.error("网络请求失败");
+					zn.preloader.close();
 				});
 			}.bind(this));
 		}else {
@@ -75,8 +91,8 @@ module.exports = React.createClass({
 	},
 	__onToolbarClick: function (item){
 		switch (item.name) {
-			case 'add':
-				this.__addItem();
+			case 'exports':
+				zn.react.downloadURL(zn.http.fixURL('/zn.plugin.survey/event/downloadEventResult') + "?event_uuid=" + this.state.event.zn_id, this.state.event.zn_title);
 				break;
 			case 'remove':
 				this.__removeItems();
@@ -86,11 +102,13 @@ module.exports = React.createClass({
 	__onTableColumnRender: function (rowIndex, columnIndex, data, item, value){
 		switch (columnIndex) {
 			case 1:
-				var _value = value.split('&&__zn__&&');
-				return <div style={{ display: 'flex', alignItems: 'center' }}>
-					{_value[1] && <img className="avatar" style={{ width: 16, height: 16, margin: 5, borderRadius: 16 }} src={_value[1]} />}
-					<a onClick={()=>zn.react.session.relativeJump('/znpluginwechat.user.info', { openid: data.zn_plugin_wechat_open_id })}>{_value[0]}</a>
-				</div>;
+				if(value && value.split){
+					var _value = value.split('&&__zn__&&');
+					return <div style={{ display: 'flex', alignItems: 'center' }}>
+						{_value[1] && <img className="avatar" style={{ width: 16, height: 16, margin: 5, borderRadius: 16 }} src={_value[1]} />}
+						<a onClick={()=>zn.react.session.relativeJump('/znpluginwechat.user.info', { openid: data.zn_plugin_wechat_open_id })}>{_value[0]}</a>
+					</div>;
+				}
 		}
 	},
 	render:function(){
@@ -104,7 +122,7 @@ module.exports = React.createClass({
 						checkbox={50}
 						showHeader={true}
 						columnRender={this.__onTableColumnRender}
-						data={zn.store.post('/zn.plugin.survey/event/pagingEventResult', { event_uuid: this.state.event.zn_id })}
+						data={this.state.data}
 						items={this.state.fields}/> : <zn.react.DataLoader content="加载中..." loader="timer" />
 				}
 			</zn.react.Page>

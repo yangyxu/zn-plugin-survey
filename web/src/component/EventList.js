@@ -62,7 +62,7 @@ module.exports = React.createClass({
 	__onItemRender: function (item){
 		return <div className="inner">
 			<div className="inner-left" style={{width: 80}}>
-				<zn.react.ProgressRing style={{margin: "0 auto"}} full={false} value={item.count/item.max_count * 100} />
+				<zn.react.ProgressRing style={{margin: "0 auto"}} full={false} value={(item.count/item.max_count * 100).toFixed(1)} />
 				{
 					!(item.status==0)?<span onClick={()=>this.__viewEventChart(item)} className="btn"><i className="fa fa-pie-chart zr-padding-3" />查看报表</span>:<span></span>
 				}
@@ -70,16 +70,6 @@ module.exports = React.createClass({
 			<div className="inner-right">
 				<div className="r-header">
 					<span className="name" onClick={()=>zn.react.session.relativeJump('/znpluginsurvey.event.info', { znid: item.zn_id })}>{item.zn_title}</span>
-					<span className="h-tag">
-						{
-							!!(item.status==0)?<i data-tooltip="部署" onClick={()=>this.__deployItem(item)} className="fa fa-telegram zr-padding-3" />:<i data-tooltip="重新发布" onClick={()=>this.__deployItem(item)} className="fa fa-telegram zr-padding-3" />
-						}
-						{this.__renderStatus(item.status)}
-					</span>
-					<i data-tooltip="修改信息" onClick={()=>this.__updateItem(item)} className="fa fa-edit zr-fr zr-padding-3" />
-					{
-						!(item.status==0) && <a className="zr-fr zr-padding-3" target="_self" href={zn.http.fixURL('/zn.plugin.survey/event/downloadEventResult') + "?event_uuid=" + item.zn_id}><i data-tooltip="导出数据" className="fa fa-download" /></a>
-					}
 				</div>
 				<div className="r-item">
 					<span className="_key">当前进度</span>
@@ -92,6 +82,19 @@ module.exports = React.createClass({
 				<div className="r-item">
 					<span className="_key">创建时间：</span>
 					<span className="_value">{item.zn_create_time}</span>
+				</div>
+				<div className="r-item">
+					<span className="h-tag zr-fl">
+						{
+							!!(item.status==0)?<i data-tooltip="部署" onClick={()=>this.__deployItem(item)} className="fa fa-telegram zr-padding-3" />:<i data-tooltip="重新发布" onClick={()=>this.__deployItem(item)} className="fa fa-telegram zr-padding-3" />
+						}
+						{this.__renderStatus(item.status)}
+					</span>
+					<i onClick={()=>this.__removeItem(item)} style={{color: '#d9534f'}} className="fa fa-remove zr-fr zr-padding-3 zr-margin-3" >删除</i>
+					<i onClick={()=>this.__updateItem(item)} style={{color: '#9b59b6'}} className="fa fa-edit zr-fr zr-padding-3 zr-margin-3" >修改</i>
+					{
+						!(item.status==0) && <i style={{color: '#9b59b6'}} onClick={()=>zn.react.downloadURL(zn.http.fixURL('/zn.plugin.survey/event/downloadEventResult') + "?event_uuid=" + item.zn_id)} className="fa zr-fr fa-download zr-padding-3 zr-margin-3" >导出为Excel</i>
+					}
 				</div>
 			</div>
 		</div>;
@@ -139,28 +142,28 @@ module.exports = React.createClass({
 			});
 		}.bind(this));
 	},
-	__removeItems: function (){
-		var _self = this,
-			_values = this.refs.table.getValue();
-		if(_values && _values.length){
-			zn.confirm('确认删除这' + _values.length + '个用户吗？', '提示', function () {
-				zn.http.post('/zn.plugin.admin/model/delete', {
-					model: this.props.model,
-					where: "id in (" + _values.join(',') + ")"
-				}).then(function (data){
-					if(data.status==200){
-						zn.toast.success('删除成功');
-						_self.state.data.refresh();
-					}else {
-						zn.toast.success(data.result);
-					}
-				}, function (data){
-					zn.toast.error("网络请求失败");
-				});
-			}.bind(this));
-		}else {
-			zn.toast.warning('请先选择要删除的活动');
-		}
+	__removeItem: function (item){
+		var _self = this;
+		zn.confirm('确认删除活动【'+item.zn_title+'】吗？', '提示', function () {
+			zn.preloader.open({
+				content: '删除中...'
+			});
+			zn.http.post('/zn.plugin.admin/model/delete', {
+				model: this.state.model,
+				where: {zn_id: item.zn_id}
+			}).then(function (data){
+				if(data.status==200){
+					zn.toast.success('删除成功');
+					_self.state.data.refresh();
+				}else {
+					zn.toast.error(data.result);
+				}
+				zn.preloader.close();
+			}, function (data){
+				zn.toast.error("网络请求失败");
+				zn.preloader.close();
+			});
+		}.bind(this));
 	},
 	__onToolbarClick: function (item){
 		switch (item.name) {

@@ -205,6 +205,46 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                         .commit();
                 }
             },
+            deleteEventResult: {
+                method: 'GET/POST',
+                argv: {
+                    event_uuid: null,
+                    ids: null
+                },
+                value: function (request, response, chain){
+                    var _event_uuid = request.getValue('event_uuid');
+                    var _ids = request.getValue("ids");
+                    var _event = null;
+                    this.beginTransaction()
+                        .query(zn.sql.select({
+                            table: 'zn_plugin_survey_event',
+                            where: {
+                                zn_id: _event_uuid
+                            }
+                        }))
+                        .query('Select Field', function (sql, data){
+                            _event = data[0];
+                            if(!_event){
+                                return response.error('未查到该活动'), false;
+                            }else {
+                                return zn.sql.delete({
+                                    table: _event.table_name,
+                                    where: "id in (" + _ids + ")"
+                                }) + zn.sql.update({
+                                    table: 'zn_plugin_survey_event',
+                                    updates: "count=count-"+_ids.split(',').length
+                                });
+                            }
+                        }, function (err, data){
+                            if(err){
+                                response.error(err);
+                            }else {
+                                response.success(data);
+                            }
+                        })
+                        .commit();
+                }
+            },
             downloadEventResult: {
                 method: 'GET/POST',
                 argv: {
@@ -373,8 +413,8 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                                 }).getCreateSql() + zn.sql.update({
                                     table: 'zn_plugin_survey_event',
                                     where: { id: _event_id },
-                                    updates: { table_generated: 1, status: 1 }
-                                });
+                                    updates: { table_generated: 1, status: 1, count: 0 }
+                                });-0
                             }else {
                                 return response.error('表存在'), false;
                             }

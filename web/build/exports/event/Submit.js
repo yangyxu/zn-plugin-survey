@@ -197,13 +197,9 @@ module.exports = React.createClass({
 				null,
 				React.createElement(
 					'div',
-					{ className: 'success' },
-					React.createElement('i', { className: 'fa fa-check zr-padding-3' }),
-					React.createElement(
-						'span',
-						null,
-						this.state.event.success_message
-					)
+					{ className: 'success', style: { display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'left' } },
+					React.createElement('i', { className: 'fa fa-check zr-padding-3', style: { fontSize: 32 } }),
+					React.createElement('div', { dangerouslySetInnerHTML: { __html: this.state.event.success_message } })
 				),
 				React.createElement(zn.react.Button, { onClick: function onClick() {
 						return _this2.setState({ submited: false });

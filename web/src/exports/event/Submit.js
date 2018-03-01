@@ -145,9 +145,9 @@ module.exports = React.createClass({
 	__renderContent: function (){
 		if(this.state.submited){
 			return <div>
-				<div className="success">
-					<i className="fa fa-check zr-padding-3" />
-					<span>{this.state.event.success_message}</span>
+				<div className="success" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'left' }}>
+					<i className="fa fa-check zr-padding-3" style={{fontSize: 32}} />
+					<div dangerouslySetInnerHTML={{__html: this.state.event.success_message}} />
 				</div>
 				<zn.react.Button onClick={()=>this.setState({submited: false})} text="重新提交(RESUBMIT)" icon="fa-edit" status="warning" />
 			</div>
