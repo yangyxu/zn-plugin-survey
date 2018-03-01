@@ -10,7 +10,7 @@ var _exports = {},
     }
 });
 
-[].forEach(function (path){
+['EventList'].forEach(function (path){
     _path = './' + path;
     _exports[(path)] = require(_path);
 });

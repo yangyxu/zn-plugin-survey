@@ -95,7 +95,9 @@ module.exports = React.createClass({
 					_value[1] && React.createElement('img', { className: 'avatar', style: { width: 16, height: 16, margin: 5, borderRadius: 16 }, src: _value[1] }),
 					React.createElement(
 						'a',
-						null,
+						{ onClick: function onClick() {
+								return zn.react.session.relativeJump('/znpluginwechat.user.info', { openid: data.zn_plugin_wechat_open_id });
+							} },
 						_value[0]
 					)
 				);

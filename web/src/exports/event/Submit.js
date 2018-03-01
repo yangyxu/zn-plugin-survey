@@ -2,7 +2,19 @@ var React = require('react');
 
 module.exports = React.createClass({
 	getInitialState: function () {
+		var _openid = null;
+		if(zn.plugin.wechat){
+			_openid = zn.plugin.wechat.getToken().openid;
+		}else {
+			_openid = localStorage.getItem('openid');
+			if(!_openid){
+				_openid = zn.uuid();
+				localStorage.setItem('openid', _openid);
+			}
+		}
 		return {
+			submited: false,
+			openid: _openid,
 			event: null,
 			fields: null,
 			error: null,
@@ -18,7 +30,7 @@ module.exports = React.createClass({
 		});
 		zn.http.post('/zn.plugin.survey/event/getEventMeta', {
 			event_uuid: this.props.request.search.znid,
-			openid: zn.plugin.wechat.getToken().openid
+			openid: this.state.openid
 		}).then(function (data){
 			if(data.status==200){
 				var _data = data.result;
@@ -42,8 +54,6 @@ module.exports = React.createClass({
 						return item;
 					});
 				}
-
-				console.log(_data.event.zn_title);
 
 				window.document.title = _data.event.zn_title;
 				this.setState({
@@ -78,11 +88,12 @@ module.exports = React.createClass({
 		zn.confirm('确认提交报名吗？', '提示', function () {
 			zn.http.post('/zn.plugin.survey/event/submitEvent', {
 				event_uuid: this.props.request.search.znid,
-				openid: zn.plugin.wechat.getToken().openid,
+				openid: this.state.openid,
 				data: data
 			}).then(function (data){
 				zn.preloader.close();
 				if(data.status==200){
+					this.state.submited = true;
 					this.__loadMeta();
 				}else {
 					zn.toast.error(data.result);
@@ -97,7 +108,7 @@ module.exports = React.createClass({
 	__renderForm: function (){
 		return (
 			<div className="submit-form">
-				<div className="count-info">还剩<span className="count">{this.state.event.max_count - this.state.event.count}</span>个名额</div>
+				{!!this.state.event.show_count && <div className="count-info">还剩<span className="count">{this.state.event.max_count - this.state.event.count}</span>个名额</div>}
 				<zn.react.Form
 					ref="form"
 					merge="data"
@@ -107,7 +118,7 @@ module.exports = React.createClass({
 					items={this.state.fields}
 					onSubmitBefore={this.__onSubmit}
 					buttons={[]} />
-				<zn.react.Button onClick={()=>this.refs.form.submit()} text="确认提交" icon="fa-hand-pointer-o" status="warning" />
+				<zn.react.Button onClick={()=>this.refs.form.submit()} text="确认提交(CONFIRM SUBMIT)" icon="fa-hand-pointer-o" status="warning" />
 			</div>
 		);
 	},
@@ -115,7 +126,7 @@ module.exports = React.createClass({
 		return (
 			<div className="submit-form">
 				<div className="success">{this.state.event.success_message}</div>
-				<div className="count-info">还剩<span className="count">{this.state.event.max_count - this.state.event.count}</span>个名额</div>
+				{this.state.event.show_count && <div className="count-info">还剩<span className="count">{this.state.event.max_count - this.state.event.count}</span>个名额</div>}
 				<ul className="field-value">
 					{
 						this.state.data.map(function (item, index){
@@ -132,15 +143,23 @@ module.exports = React.createClass({
 		);
 	},
 	__renderContent: function (){
+		if(this.state.submited){
+			return <div>
+				<div className="success">
+					<i className="fa fa-check zr-padding-3" />
+					<span>{this.state.event.success_message}</span>
+				</div>
+				<zn.react.Button onClick={()=>this.setState({submited: false})} text="重新提交(RESUBMIT)" icon="fa-edit" status="warning" />
+			</div>
+		}
 		if(this.state.error){
 			return this.__renderError(this.state.error);
 		}
 
-		if(this.state.fields){
-			return this.__renderForm();
-		}
-		if(this.state.data){
+		if(this.state.data && this.state.event.unique_check){
 			return this.__renderResult();
+		}else if(this.state.event){
+			return this.__renderForm();
 		}
 
 		return <zn.react.DataLoader content="加载数据中..." loader="timer" />;
@@ -157,6 +176,7 @@ module.exports = React.createClass({
 						this.state.event && <div className="inner-title">{this.state.event.zn_title}</div>
 					}
 					{this.__renderContent()}
+					{this.state.event && <div className="footer-title">{this.state.event.footer_title}</div>}
 				</div>
 			</div>
 		);

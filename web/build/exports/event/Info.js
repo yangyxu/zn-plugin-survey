@@ -1,3 +1,5 @@
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var React = require('react');
 var QRCode = require('qrcode.react');
 
@@ -8,7 +10,7 @@ module.exports = React.createClass({
 		return {
 			event: null,
 			fields: [],
-			formItems: [{ title: '名称', name: 'title', type: 'Input', required: true, error: '必填项!' }, {
+			formItems: [{ title: '标题', name: 'title', type: 'Input', required: true, error: '必填项!' }, {
 				title: '是否必填字段',
 				name: 'required',
 				type: 'Radio',
@@ -18,7 +20,16 @@ module.exports = React.createClass({
 				title: '类型',
 				name: 'type',
 				type: 'Select',
-				data: [{ text: '单行输入框', value: 'Input' }, { text: '选择框', value: 'Select' }, { text: '单图片', value: 'ImageUploader' }, { text: '多文件', value: 'FileUploader' }, { text: '是否框', value: 'Checkbox' }, { text: '多选框', value: 'CheckboxGroup' }, { text: '单选框', value: 'RadioGroup' }, { text: '多行输入框', value: 'Textarea' }]
+				data: [{ text: '组标题', value: 'FormTitle' }, { text: '单行输入框', value: 'Input' }, { text: '数字框', value: 'Input_number' }, { text: '日期框', value: 'Input_date' }, { text: '时间框', value: 'DateTime' }, { text: '组合框', value: 'MultiInput' }, { text: '选择框', value: 'Select' }, { text: '单图片', value: 'ImageUploader' }, { text: '多文件', value: 'FileUploader' }, { text: '是否框', value: 'Checkbox' }, { text: '多选框', value: 'CheckboxGroup' }, { text: '单选框', value: 'Radio' }, { text: '多行输入框', value: 'Textarea' }],
+				onChange: function onChange(data, item, select) {
+					if (data) {
+						if (data.value.indexOf('Input_') != -1) {
+							select.props.form.state.hiddens.attrs = JSON.stringify({
+								type: data.value.split('_')[1]
+							});
+						}
+					}
+				}
 			}, { title: '数据源', name: 'data', type: 'Textarea' }, { title: '字段说明', name: 'zn_note', type: 'Textarea' }],
 			toolbarItems: [{ text: '添加字段', name: 'add', icon: 'fa-plus', style: { marginRight: 5 } }]
 		};
@@ -44,13 +55,36 @@ module.exports = React.createClass({
 			zn.preloader.close();
 		});
 	},
+	__onAddSubmitBefore: function __onAddSubmitBefore(data) {
+		for (var key in data) {
+			if (key.indexOf('.') != -1) {
+				var _value = data[key],
+				    _keys = key.split('.');
+				if (!data[_keys[0]]) {
+					data[_keys[0]] = {};
+				}
+				data[_keys[0]][_keys[1]] = _value;
+				data[key] = null;
+				delete data[key];
+			}
+		}
+		zn.http.post('/zn.plugin.survey/event/createEventField', data).then(function (data) {
+			if (data.status == 200) {
+				this.__loadMeta();
+			} else {
+				zn.notification.error(data.result);
+			}
+		}.bind(this), function (err) {
+			zn.notification.error('网络请求失败');
+		}.bind(this));
+		return false;
+	},
 	__addItem: function __addItem() {
 		zn.dialog({
 			title: '添加字段',
 			content: React.createElement(zn.react.Form, {
-				action: '/zn.plugin.survey/event/createEventField',
 				hiddens: { zn_id: zn.uuid(), event_id: this.state.event.id, field_order: this.state.fields.length + 1 },
-				onSubmitSuccess: this.__loadMeta,
+				onSubmitBefore: this.__onAddSubmitBefore,
 				items: this.state.formItems })
 		});
 	},
@@ -73,11 +107,15 @@ module.exports = React.createClass({
 				where: {
 					id: item.id
 				}
-			}).then(function () {
-				zn.notification.success('删除成功');
-				this.__loadMeta();
+			}).then(function (data) {
+				if (data.status == 200) {
+					zn.notification.success('删除成功');
+					this.__loadMeta();
+				} else {
+					zn.notification.error(data.result);
+				}
 			}.bind(this), function (data) {
-				zn.notification.error('删除失败: ' + data.result);
+				zn.notification.error("网络请求失败");
 			});
 		}.bind(this));
 	},
@@ -85,12 +123,27 @@ module.exports = React.createClass({
 		var _this = this;
 
 		if (item.data) {
-			item.data = eval(item.data);
+			try {
+				if (item.data[0] == '[' && item.data[item.data.length - 1] == ']') {
+					item.data = JSON.parse(item.data);
+				} else if (item.data.indexOf(' ') != -1) {
+					item.data = item.data.split(' ');
+				}
+			} catch (e) {
+				console.error(e);
+			}
 		}
+		if (item.attrs) {
+			item.attrs = JSON.parse(item.attrs);
+		}
+		if (item.props) {
+			zn.extend(item, JSON.parse(item.props));
+		}
+		item.type = item.type.split('_')[0];
 		return React.createElement(
 			'li',
 			{ className: 'field' },
-			React.createElement(zn.react.FormItem, item),
+			React.createElement(zn.react.FormItem, _extends({}, item, { className: 'column' })),
 			React.createElement(
 				'div',
 				{ className: 'action' },
@@ -108,7 +161,7 @@ module.exports = React.createClass({
 
 		return React.createElement(
 			zn.react.Page,
-			{ className: 'zn-plugin-survey-event-info', title: this.state.event ? this.state.event.zn_title : '加载中...' },
+			{ className: 'zn-plugin-survey-event-info', title: '\u6D3B\u52A8\u8BE6\u60C5' },
 			this.state.event && React.createElement(
 				'div',
 				{ className: 'inner info' },
@@ -212,7 +265,7 @@ module.exports = React.createClass({
 				React.createElement(
 					'div',
 					{ className: 'content' },
-					React.createElement(zn.react.Button, { onClick: this.__addItem, text: '\u6DFB\u52A0\u5B57\u6BB5', icon: 'fa-plus' }),
+					React.createElement(zn.react.Button, { onClick: this.__addItem, text: '\u6DFB\u52A0\u5B57\u6BB5', status: 'warning', icon: 'fa-plus' }),
 					!!this.state.fields.length ? React.createElement(
 						'ul',
 						{ className: 'fields' },

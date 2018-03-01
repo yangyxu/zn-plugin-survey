@@ -1,7 +1,7 @@
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var React = require('react');
-var EventList = require('./List.js');
+var EventList = require('../../component/EventList.js');
 
 module.exports = React.createClass({
 	displayName: 'exports',
@@ -17,7 +17,7 @@ module.exports = React.createClass({
 		};
 	},
 	__rightRender: function __rightRender(data) {
-		return React.createElement(EventList, { data: data });
+		return React.createElement(EventList, { type: data.value });
 	},
 	render: function render() {
 		return React.createElement(zn.plugin.admin.TreeModelView, _extends({}, this.props, { emptyRender: function emptyRender() {

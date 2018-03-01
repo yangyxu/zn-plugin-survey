@@ -1,6 +1,5 @@
 var React = require('react');
-var EventList = require('./List.js');
-
+var EventList = require('../../component/EventList.js');
 
 module.exports = React.createClass({
 	getDefaultProps: function () {
@@ -27,7 +26,7 @@ module.exports = React.createClass({
 		};
 	},
 	__rightRender: function (data){
-		return <EventList data={data} />;
+		return <EventList type={data.value} />;
 	},
 	render:function(){
 		return (

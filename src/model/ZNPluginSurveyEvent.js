@@ -53,6 +53,26 @@ zn.define(function () {
                 type: ['int', 4],
                 default: 0
             },
+            show_count: {
+                value: null,
+                type: ['int', 4],
+                default: 0
+            },
+            unique_check: {
+                value: null,
+                type: ['int', 4],
+                default: 0
+            },
+            email_enabled: {
+                value: null,
+                type: ['int', 4],
+                default: 0
+            },
+            footer_title: {
+                value: null,
+                type: ['varchar', 100],
+                default: ''
+            },
             owner_openid: {
                 value: null,
                 type: ['varchar', 100],

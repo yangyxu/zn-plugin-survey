@@ -2,6 +2,39 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
 
     return zn.Controller('event',{
         methods: {
+            create: {
+                method: 'GET/POST',
+                argv: {
+                    values: null
+                },
+                value: function (request, response, chain){
+                    var _values = request.getValue('values');
+                        table_name:
+                    this.beginTransaction()
+                        .query(zn.sql.select({
+                            table: 'zn_plugin_survey_event_type',
+                            where: { id: _values.type_id }
+                        }))
+                        .query('validate', function (sql, data){
+                            var _type = data[0];
+                            if(!_type){
+                                return response.error('未查到该活动'), false;
+                            }
+
+                            _values.table_name = _type.table_prefix + '_' + zn.date.nowDateString() + '_' + zn.util.randomNumbers(6)
+                            return zn.sql.insert({
+                                table: 'zn_plugin_survey_event',
+                                values: _values
+                            });
+                        }, function (err, data){
+                            if(err){
+                                return response.error(err);
+                            }else {
+                                return response.success("创建成功");
+                            }
+                        }).commit();
+                }
+            },
             getEventMeta: {
                 method: 'GET/POST',
                 argv: {
@@ -57,6 +90,7 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                             delete _data.event.table_name;
                             _data.event.table_generated = null;
                             delete _data.event.table_generated;
+                            _data.fields = data[0];
                             if(data[1][0]){
                                 var _obj = data[1][0];
                                 _data.data = data[0].map(function (field, index){
@@ -68,7 +102,6 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                                 });
                                 response.success(_data);
                             }else {
-                                _data.fields = data[0];
                                 response.success(_data);
                             }
                         }).commit();
@@ -112,7 +145,7 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                             });
                         })
                         .query('insert', function (sql, data){
-                            if(data[0]){
+                            if(data[0] && _value.event.unique_check){
                                 return response.error('您已经提交报名'), false;
                             }else {
                                 _data.zn_plugin_wechat_open_id = _openid;
@@ -357,16 +390,18 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
             getEventsByType: {
                 method: 'GET/POST',
                 argv: {
-                    status: null
+
                 },
                 value: function (request, response, chain){
                     var _type = request.getValue('type'),
                         _status = request.getValue('status'),
                         _where = ['zn_deleted=0 and parent_id=0'];
-                    if(_status != -1){
-                        _where.push(' and status=' + _status);
-                    }else {
-                        _where.push(' and status=1 and UNIX_TIMESTAMP(end_time)<UNIX_TIMESTAMP(now())');
+                    if(_status !== undefined && _status != 100){
+                        if(_status != -1){
+                            _where.push(' and status=' + _status);
+                        }else {
+                            _where.push(' and status=1 and UNIX_TIMESTAMP(end_time)<UNIX_TIMESTAMP(now())');
+                        }
                     }
                     if(_type){
                         _where.push(' and type_id=' + _type);
