@@ -110,6 +110,11 @@ zn.define(function () {
                 value: null,
                 type: ['varchar', 100],
                 default: ''
+            },
+            text_color: {
+                value: null,
+                type: ['varchar', 10],
+                default: '#2D2A2A'
             }
         }
     });

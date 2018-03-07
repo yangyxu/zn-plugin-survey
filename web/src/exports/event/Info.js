@@ -204,7 +204,7 @@ module.exports = React.createClass({
 					</div>
 				}
 				{
-					this.state.event && <div className="event-fields">
+					this.state.event && <div className="event-fields" style={{color: this.state.event.text_color}}>
 						{
 							this.state.event.background_image && <img className="background-image" src={this.state.event.background_image} />
 						}

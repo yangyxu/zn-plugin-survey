@@ -24,9 +24,11 @@ module.exports = React.createClass({
 					return {
 						title: field.title,
 						name: field.name,
+						type: field.type,
 						width: field.width
 					}
 				});
+
 				_data.fields.push({
 					title: '微信账号',
 					name: 'openid_convert',
@@ -100,15 +102,19 @@ module.exports = React.createClass({
 		}
 	},
 	__onTableColumnRender: function (rowIndex, columnIndex, data, item, value){
-		switch (columnIndex) {
-			case 1:
-				if(value && value.split){
-					var _value = value.split('&&__zn__&&');
-					return <div style={{ display: 'flex', alignItems: 'center' }}>
-						{_value[1] && <img className="avatar" style={{ width: 16, height: 16, margin: 5, borderRadius: 16 }} src={_value[1]} />}
-						<a onClick={()=>zn.react.session.relativeJump('/znpluginwechat.user.info', { openid: data.zn_plugin_wechat_open_id })}>{_value[0]}</a>
-					</div>;
-				}
+		if(item.name == 'openid_convert') {
+			if(value && value.split){
+				var _value = value.split('&&__zn__&&');
+				return <div style={{ display: 'flex', alignItems: 'center' }}>
+					{_value[1] && <img className="avatar" style={{ width: 16, height: 16, margin: 5, borderRadius: 16 }} src={_value[1]} />}
+					<a onClick={()=>zn.react.session.relativeJump('/znpluginwechat.user.info', { openid: data.zn_plugin_wechat_open_id })}>{_value[0]}</a>
+				</div>;
+			}
+		}
+
+		switch (item.type) {
+			case 'FileUploader':
+				return <zn.react.Files value={value} />;
 		}
 	},
 	render:function(){

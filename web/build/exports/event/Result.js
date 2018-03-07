@@ -23,9 +23,11 @@ module.exports = React.createClass({
 					return {
 						title: field.title,
 						name: field.name,
+						type: field.type,
 						width: field.width
 					};
 				});
+
 				_data.fields.push({
 					title: '微信账号',
 					name: 'openid_convert',
@@ -99,23 +101,27 @@ module.exports = React.createClass({
 		}
 	},
 	__onTableColumnRender: function __onTableColumnRender(rowIndex, columnIndex, data, item, value) {
-		switch (columnIndex) {
-			case 1:
-				if (value && value.split) {
-					var _value = value.split('&&__zn__&&');
-					return React.createElement(
-						'div',
-						{ style: { display: 'flex', alignItems: 'center' } },
-						_value[1] && React.createElement('img', { className: 'avatar', style: { width: 16, height: 16, margin: 5, borderRadius: 16 }, src: _value[1] }),
-						React.createElement(
-							'a',
-							{ onClick: function onClick() {
-									return zn.react.session.relativeJump('/znpluginwechat.user.info', { openid: data.zn_plugin_wechat_open_id });
-								} },
-							_value[0]
-						)
-					);
-				}
+		if (item.name == 'openid_convert') {
+			if (value && value.split) {
+				var _value = value.split('&&__zn__&&');
+				return React.createElement(
+					'div',
+					{ style: { display: 'flex', alignItems: 'center' } },
+					_value[1] && React.createElement('img', { className: 'avatar', style: { width: 16, height: 16, margin: 5, borderRadius: 16 }, src: _value[1] }),
+					React.createElement(
+						'a',
+						{ onClick: function onClick() {
+								return zn.react.session.relativeJump('/znpluginwechat.user.info', { openid: data.zn_plugin_wechat_open_id });
+							} },
+						_value[0]
+					)
+				);
+			}
+		}
+
+		switch (item.type) {
+			case 'FileUploader':
+				return React.createElement(zn.react.Files, { value: value });
 		}
 	},
 	render: function render() {

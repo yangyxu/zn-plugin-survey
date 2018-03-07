@@ -118,14 +118,17 @@ module.exports = React.createClass({
 					items={this.state.fields}
 					onSubmitBefore={this.__onSubmit}
 					buttons={[]} />
-				<zn.react.Button onClick={()=>this.refs.form.submit()} text="确认提交(CONFIRM SUBMIT)" icon="fa-hand-pointer-o" status="warning" />
+				<zn.react.Button onClick={()=>this.refs.form.submit()} text="提交(SUBMIT)" icon="fa-pencil" status="warning" />
 			</div>
 		);
 	},
 	__renderResult: function (){
 		return (
 			<div className="submit-form">
-				<div className="success">{this.state.event.success_message}</div>
+				<div className="success-tip" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'left' }}>
+					<i className="fa fa-check zr-padding-3" style={{fontSize: 32}} />
+					<div dangerouslySetInnerHTML={{__html: this.state.event.success_message}} />
+				</div>
 				{this.state.event.show_count && <div className="count-info">还剩<span className="count">{this.state.event.max_count - this.state.event.count}</span>个名额</div>}
 				<ul className="field-value">
 					{
@@ -143,21 +146,25 @@ module.exports = React.createClass({
 		);
 	},
 	__renderContent: function (){
-		if(this.state.submited){
-			return <div>
-				<div className="success" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'left' }}>
-					<i className="fa fa-check zr-padding-3" style={{fontSize: 32}} />
-					<div dangerouslySetInnerHTML={{__html: this.state.event.success_message}} />
-				</div>
-				<zn.react.Button onClick={()=>this.setState({submited: false})} text="重新提交(RESUBMIT)" icon="fa-edit" status="warning" />
-			</div>
-		}
 		if(this.state.error){
 			return this.__renderError(this.state.error);
 		}
-
-		if(this.state.data && this.state.event.unique_check){
-			return this.__renderResult();
+		if(this.state.data){
+			if(this.state.event.unique_check){
+				return this.__renderResult();
+			}else {
+				if(this.state.submited){
+					return <div>
+						<div className="success-tip" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'left' }}>
+							<i className="fa fa-check zr-padding-3" style={{fontSize: 32}} />
+							<div dangerouslySetInnerHTML={{__html: this.state.event.success_message}} />
+						</div>
+						<zn.react.Button onClick={()=>this.setState({ submited: false })} text="返回(BACK)" icon="fa-angle-left" status="warning" />
+					</div>
+				}else {
+					return this.__renderForm();
+				}
+			}
 		}else if(this.state.event){
 			return this.__renderForm();
 		}
@@ -166,7 +173,7 @@ module.exports = React.createClass({
 	},
 	render:function(){
 		return (
-			<div className="zn-plugin-survey-event-submit">
+			<div className="zn-plugin-survey-event-submit"  style={{color: this.state.event ? this.state.event.text_color : null}}>
 
 				{
 					this.state.event && <img className="inner-bg" src={zn.http.fixURL(this.state.event.background_image)} />

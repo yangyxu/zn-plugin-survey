@@ -143,7 +143,7 @@ module.exports = React.createClass({
 				buttons: [] }),
 			React.createElement(zn.react.Button, { onClick: function onClick() {
 					return _this.refs.form.submit();
-				}, text: '\u786E\u8BA4\u63D0\u4EA4(CONFIRM SUBMIT)', icon: 'fa-hand-pointer-o', status: 'warning' })
+				}, text: '\u63D0\u4EA4(SUBMIT)', icon: 'fa-pencil', status: 'warning' })
 		);
 	},
 	__renderResult: function __renderResult() {
@@ -152,8 +152,9 @@ module.exports = React.createClass({
 			{ className: 'submit-form' },
 			React.createElement(
 				'div',
-				{ className: 'success' },
-				this.state.event.success_message
+				{ className: 'success-tip', style: { display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'left' } },
+				React.createElement('i', { className: 'fa fa-check zr-padding-3', style: { fontSize: 32 } }),
+				React.createElement('div', { dangerouslySetInnerHTML: { __html: this.state.event.success_message } })
 			),
 			this.state.event.show_count && React.createElement(
 				'div',
@@ -191,27 +192,31 @@ module.exports = React.createClass({
 	__renderContent: function __renderContent() {
 		var _this2 = this;
 
-		if (this.state.submited) {
-			return React.createElement(
-				'div',
-				null,
-				React.createElement(
-					'div',
-					{ className: 'success', style: { display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'left' } },
-					React.createElement('i', { className: 'fa fa-check zr-padding-3', style: { fontSize: 32 } }),
-					React.createElement('div', { dangerouslySetInnerHTML: { __html: this.state.event.success_message } })
-				),
-				React.createElement(zn.react.Button, { onClick: function onClick() {
-						return _this2.setState({ submited: false });
-					}, text: '\u91CD\u65B0\u63D0\u4EA4(RESUBMIT)', icon: 'fa-edit', status: 'warning' })
-			);
-		}
 		if (this.state.error) {
 			return this.__renderError(this.state.error);
 		}
-
-		if (this.state.data && this.state.event.unique_check) {
-			return this.__renderResult();
+		if (this.state.data) {
+			if (this.state.event.unique_check) {
+				return this.__renderResult();
+			} else {
+				if (this.state.submited) {
+					return React.createElement(
+						'div',
+						null,
+						React.createElement(
+							'div',
+							{ className: 'success-tip', style: { display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'left' } },
+							React.createElement('i', { className: 'fa fa-check zr-padding-3', style: { fontSize: 32 } }),
+							React.createElement('div', { dangerouslySetInnerHTML: { __html: this.state.event.success_message } })
+						),
+						React.createElement(zn.react.Button, { onClick: function onClick() {
+								return _this2.setState({ submited: false });
+							}, text: '\u8FD4\u56DE(BACK)', icon: 'fa-angle-left', status: 'warning' })
+					);
+				} else {
+					return this.__renderForm();
+				}
+			}
 		} else if (this.state.event) {
 			return this.__renderForm();
 		}
@@ -221,7 +226,7 @@ module.exports = React.createClass({
 	render: function render() {
 		return React.createElement(
 			'div',
-			{ className: 'zn-plugin-survey-event-submit' },
+			{ className: 'zn-plugin-survey-event-submit', style: { color: this.state.event ? this.state.event.text_color : null } },
 			this.state.event && React.createElement('img', { className: 'inner-bg', src: zn.http.fixURL(this.state.event.background_image) }),
 			React.createElement(
 				'div',
