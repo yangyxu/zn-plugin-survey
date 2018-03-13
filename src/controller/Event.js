@@ -129,7 +129,10 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
 
                             return zn.sql.select({
                                 table: 'zn_plugin_survey_event_field',
-                                where: { event_id:  _data.event.id }
+                                where: { event_id:  _data.event.id },
+                                order: {
+                                    field_order: 'asc'
+                                }
                             }) + zn.sql.select({
                                 table: _data.event.table_name,
                                 where: {
@@ -446,6 +449,9 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                             table: 'zn_plugin_survey_event_field',
                             where: {
                                 event_id: _event_id
+                            },
+                            order: {
+                                field_order: 'asc'
                             }
                         }))
                         .query('create table', function (sql, rows){
