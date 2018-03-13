@@ -2,6 +2,61 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
 
     return zn.Controller('event',{
         methods: {
+            orderField: {
+                method: 'GET/POST',
+                argv: {
+                    field_id: null,
+                    order: 'up'
+                },
+                value: function (request, response, chain){
+                    var _field_id = request.getValue('field_id'),
+                        _order = request.getValue('order'),
+                        _field = null;
+                    this.beginTransaction()
+                        .query(zn.sql.select({
+                            table: 'zn_plugin_survey_event_field',
+                            where: { id: _field_id }
+                        }))
+                        .query('validate', function (sql, data){
+                            _field = data[0];
+                            if(!_field){
+                                return response.error('未查到该字段'), false;
+                            }
+
+                            if(_order=='up'){
+                                if(_field.field_order==1){
+                                    return response.error('已经是最高'), false;
+                                }else {
+                                    return zn.sql.update({
+                                        table: 'zn_plugin_survey_event_field',
+                                        updates: { field_order: _field.field_order },
+                                        where: { field_order: _field.field_order - 1, event_id: _field.event_id }
+                                    }) + zn.sql.update({
+                                        table: 'zn_plugin_survey_event_field',
+                                        updates: {field_order: (_field.field_order - 1)},
+                                        where: { id: _field_id }
+                                    });
+                                }
+                            }else {
+                                return zn.sql.update({
+                                    table: 'zn_plugin_survey_event_field',
+                                    updates: { field_order: _field.field_order },
+                                    where: { field_order: _field.field_order + 1, event_id: _field.event_id }
+                                }) + zn.sql.update({
+                                    table: 'zn_plugin_survey_event_field',
+                                    updates: {field_order: (_field.field_order + 1)},
+                                    where: { id: _field_id }
+                                });
+                            }
+                        }, function (err, data){
+                            if(err){
+                                return response.error(err);
+                            }else {
+                                return response.success("排序成功");
+                            }
+                        }).commit();
+                }
+            },
             create: {
                 method: 'GET/POST',
                 argv: {
@@ -9,7 +64,6 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                 },
                 value: function (request, response, chain){
                     var _values = request.getValue('values');
-                        table_name:
                     this.beginTransaction()
                         .query(zn.sql.select({
                             table: 'zn_plugin_survey_event_type',
@@ -270,7 +324,10 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                                     table: _data.event.table_name
                                 }) + zn.sql.select({
                                     table: 'zn_plugin_survey_event_field',
-                                    where: { event_id: _data.event.id }
+                                    where: { event_id: _data.event.id },
+                                    order: {
+                                        field_order: 'asc'
+                                    }
                                 });
                             }
                         }, function (err, data){
@@ -328,6 +385,9 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                                     where: {
                                         event_id: _data.event.id,
                                         zn_deleted: 0
+                                    },
+                                    order: {
+                                        field_order: 'asc'
                                     }
                                 })
                             }

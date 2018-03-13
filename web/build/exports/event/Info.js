@@ -102,6 +102,7 @@ module.exports = React.createClass({
 	},
 	__removeItem: function __removeItem(item) {
 		zn.confirm('确认删除这个字段吗？', '提示', function () {
+			zn.preloader.open({ title: '删除中...' });
 			zn.http.post('/zn.plugin.admin/model/delete', {
 				model: 'ZNPluginSurveyEventField',
 				where: {
@@ -114,12 +115,50 @@ module.exports = React.createClass({
 				} else {
 					zn.notification.error(data.result);
 				}
+				zn.preloader.close();
 			}.bind(this), function (data) {
 				zn.notification.error("网络请求失败");
+				zn.preloader.close();
 			});
 		}.bind(this));
 	},
-	__itemRender: function __itemRender(item) {
+	__upItem: function __upItem(item) {
+		zn.preloader.open({ title: '升序中...' });
+		zn.http.post('/zn.plugin.survey/event/orderField', {
+			field_id: item.id,
+			order: 'up'
+		}).then(function (data) {
+			if (data.status == 200) {
+				zn.notification.success('升序成功');
+				this.__loadMeta();
+			} else {
+				zn.notification.error(data.result);
+			}
+			zn.preloader.close();
+		}.bind(this), function (data) {
+			zn.notification.error("网络请求失败");
+			zn.preloader.close();
+		});
+	},
+	__downItem: function __downItem(item) {
+		zn.preloader.open({ title: '降序中...' });
+		zn.http.post('/zn.plugin.survey/event/orderField', {
+			field_id: item.id,
+			order: 'down'
+		}).then(function (data) {
+			if (data.status == 200) {
+				zn.notification.success('降序成功');
+				this.__loadMeta();
+			} else {
+				zn.notification.error(data.result);
+			}
+			zn.preloader.close();
+		}.bind(this), function (data) {
+			zn.notification.error("网络请求失败");
+			zn.preloader.close();
+		});
+	},
+	__itemRender: function __itemRender(item, index) {
 		var _this = this;
 
 		if (item.data) {
@@ -147,6 +186,12 @@ module.exports = React.createClass({
 			React.createElement(
 				'div',
 				{ className: 'action' },
+				index != 0 && React.createElement('i', { onClick: function onClick() {
+						return _this.__upItem(item);
+					}, 'data-tooltip': '\u4E0A\u79FB', className: 'fa fa-angle-up' }),
+				index != this.state.fields.length - 1 && React.createElement('i', { onClick: function onClick() {
+						return _this.__downItem(item);
+					}, 'data-tooltip': '\u4E0B\u79FB', className: 'fa fa-angle-down' }),
 				React.createElement('i', { onClick: function onClick() {
 						return _this.__updateItem(item);
 					}, 'data-tooltip': '\u4FEE\u6539\u5B57\u6BB5', className: 'fa fa-edit' }),

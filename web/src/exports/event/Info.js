@@ -124,6 +124,7 @@ module.exports = React.createClass({
 	},
 	__removeItem: function (item){
 		zn.confirm('确认删除这个字段吗？', '提示', function () {
+			zn.preloader.open({title: '删除中...'});
 			zn.http.post('/zn.plugin.admin/model/delete', {
 				model: 'ZNPluginSurveyEventField',
 				where: {
@@ -136,12 +137,50 @@ module.exports = React.createClass({
 				}else {
 					zn.notification.error(data.result);
 				}
+				zn.preloader.close();
 			}.bind(this), function (data){
 				zn.notification.error("网络请求失败");
+				zn.preloader.close();
 			});
 		}.bind(this));
 	},
-	__itemRender: function (item){
+	__upItem: function (item){
+		zn.preloader.open({title: '升序中...'});
+		zn.http.post('/zn.plugin.survey/event/orderField', {
+			field_id: item.id,
+			order: 'up'
+		}).then(function (data){
+			if(data.status==200){
+				zn.notification.success('升序成功');
+				this.__loadMeta();
+			}else {
+				zn.notification.error(data.result);
+			}
+			zn.preloader.close();
+		}.bind(this), function (data){
+			zn.notification.error("网络请求失败");
+			zn.preloader.close();
+		});
+	},
+	__downItem: function (item){
+		zn.preloader.open({title: '降序中...'});
+		zn.http.post('/zn.plugin.survey/event/orderField', {
+			field_id: item.id,
+			order: 'down'
+		}).then(function (data){
+			if(data.status==200){
+				zn.notification.success('降序成功');
+				this.__loadMeta();
+			}else {
+				zn.notification.error(data.result);
+			}
+			zn.preloader.close();
+		}.bind(this), function (data){
+			zn.notification.error("网络请求失败");
+			zn.preloader.close();
+		});
+	},
+	__itemRender: function (item, index){
 		if(item.data){
 			try {
 				if(item.data[0] == '[' && item.data[item.data.length-1] == ']'){
@@ -163,6 +202,12 @@ module.exports = React.createClass({
 		return <li className="field">
 			<zn.react.FormItem {...item} className="column" />
 			<div className="action">
+				{
+					index!=0 && <i onClick={()=>this.__upItem(item)} data-tooltip="上移" className="fa fa-angle-up" />
+				}
+				{
+					index!=(this.state.fields.length-1) && <i onClick={()=>this.__downItem(item)} data-tooltip="下移" className="fa fa-angle-down" />
+				}
 				<i onClick={()=>this.__updateItem(item)} data-tooltip="修改字段" className="fa fa-edit" />
 				<i onClick={()=>this.__removeItem(item)} data-tooltip="删除字段" className="fa fa-remove" style={{color: 'red'}} />
 			</div>
