@@ -479,7 +479,7 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                                     table: 'zn_plugin_survey_event',
                                     where: { id: _event_id },
                                     updates: { table_generated: 1, status: 1, count: 0 }
-                                });-0
+                                });
                             }else {
                                 return response.error('表存在'), false;
                             }
