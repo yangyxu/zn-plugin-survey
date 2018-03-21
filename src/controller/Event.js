@@ -469,7 +469,7 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                                 _fields.map(function(field){
                                     __fields[field.name] = {
                                         //type: JSON.parse(field.field_type),
-                                        type: ["varchar", 200],
+                                        type: ["varchar", 2000],
                                         default: ""
                                     };
                                 });
