@@ -284,12 +284,20 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                             if(!_event){
                                 return response.error('未查到该活动'), false;
                             }else {
+                                _ids = _ids.split(',').map(function (item){
+                                    if(item){
+                                        return item;
+                                    }
+                                });
                                 return zn.sql.delete({
                                     table: _event.table_name,
-                                    where: "id in (" + _ids + ")"
+                                    where: "id in (" + _ids.join(',') + ")"
                                 }) + zn.sql.update({
                                     table: 'zn_plugin_survey_event',
-                                    updates: "count=count-"+_ids.split(',').length
+                                    updates: "count = count - " + (_ids.length).toString(),
+                                    where: {
+                                        zn_id: _event_uuid
+                                    }
                                 });
                             }
                         }, function (err, data){
@@ -340,7 +348,7 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                                 var _rows = data[0], _fields = data[1], _fk = [];
                                 var _xlsx = node_officegen('xlsx'),
                                     _sheet0 = _xlsx.makeNewSheet();
-                                _sheet0.name = _data.event.zn_title;
+                                //_sheet0.name = _data.event.zn_title;
                                 _sheet0.data[0] = [];
                                 _fields.push({title: '提交时间', name: 'zn_create_time'})
                                 _fields.forEach(function (field){
@@ -349,13 +357,12 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                                 });
                                 _rows.forEach(function (row, index){
                                     _sheet0.data.push(_fk.map(function (key){
-                                        return row[key];
+                                        return (row[key]).toString();
                                     }));
                                 });
-
                                 response.writeHead(200, {
                 				    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                				    'Content-disposition': 'attachment; filename='+_data.event.table_name+'_data.xlsx'
+                                    'Content-disposition': 'attachment; filename=' + encodeURI(_data.event.zn_title) + '.xlsx'
                 				});
                                 _xlsx.generate(response._serverResponse);
                             }

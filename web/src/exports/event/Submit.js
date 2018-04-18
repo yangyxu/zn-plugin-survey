@@ -85,6 +85,12 @@ module.exports = React.createClass({
 		zn.preloader.open({
 			content: '提交中...'
 		});
+		/*
+		for(var key in data){
+			if(!isNaN(data[key])){
+				data[key] = new Number(data[key]).toPrecision(100).split('.')[0];
+			}
+		}*/
 		zn.confirm('确认提交报名吗？', '提示', function () {
 			zn.http.post('/zn.plugin.survey/event/submitEvent', {
 				event_uuid: this.props.request.search.znid,
@@ -129,7 +135,7 @@ module.exports = React.createClass({
 					<i className="fa fa-check zr-padding-3" style={{fontSize: 32}} />
 					<div dangerouslySetInnerHTML={{__html: this.state.event.success_message}} />
 				</div>
-				{this.state.event.show_count && <div className="count-info">还剩<span className="count">{this.state.event.max_count - this.state.event.count}</span>个名额</div>}
+				{!!this.state.event.show_count && <div className="count-info">还剩<span className="count">{this.state.event.max_count - this.state.event.count}</span>个名额</div>}
 				<ul className="field-value">
 					{
 						this.state.data.map(function (item, index){

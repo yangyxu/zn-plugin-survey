@@ -267,7 +267,7 @@ module.exports = React.createClass({
 					data: [{ status: 100, icon: 'fa-th-list', text: '全部活动' }, { status: 0, icon: 'fa-edit', text: '待发布' }, { status: 1, icon: 'fa-link', text: '已发布' }, { status: -1, icon: 'fa-check-circle', text: '已结束' }] }) },
 			React.createElement(zn.react.PagerView, {
 				view: 'ListView',
-				className: 'projects',
+				viewClassName: 'projects',
 				data: this.state.data,
 				itemRender: this.__onItemRender })
 		);

@@ -193,7 +193,7 @@ module.exports = React.createClass({
 					]} />} >
 				<zn.react.PagerView
 					view="ListView"
-					className="projects"
+					viewClassName="projects"
 					data={this.state.data}
 					itemRender={this.__onItemRender}/>
 			</zn.react.Page>
