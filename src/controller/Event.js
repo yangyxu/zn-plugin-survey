@@ -110,7 +110,7 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                             }
                             var _event = _data.event = data[0];
                             if(_event.start_time || _event.end_time){
-                                var _now = (new Date()).getTime()
+                                var _now = (new Date()).getTime();
                                 if(_now>(new Date(_event.end_time)).getTime()){
                                     return response.error('活动已经结束'), false;
                                 }
@@ -357,7 +357,7 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                                 });
                                 _rows.forEach(function (row, index){
                                     _sheet0.data.push(_fk.map(function (key){
-                                        return (row[key]).toString();
+                                        return row[key];
                                     }));
                                 });
                                 response.writeHead(200, {
