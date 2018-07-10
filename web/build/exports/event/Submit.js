@@ -149,7 +149,7 @@ module.exports = React.createClass({
 				buttons: [] }),
 			React.createElement(zn.react.Button, { onClick: function onClick() {
 					return _this.refs.form.submit();
-				}, text: '\u63D0\u4EA4(SUBMIT)', icon: 'fa-pencil', status: 'warning' })
+				}, className: 'submit-btn', text: '\u63D0\u4EA4\u8868\u5355', icon: 'fa-pencil', status: 'warning' })
 		);
 	},
 	__renderResult: function __renderResult() {

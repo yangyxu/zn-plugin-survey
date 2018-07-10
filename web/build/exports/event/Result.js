@@ -118,9 +118,10 @@ module.exports = React.createClass({
 				);
 			}
 		}
-
 		switch (item.type) {
 			case 'FileUploader':
+			case 'ImageUploader':
+			case 'Images':
 				return React.createElement(zn.react.Files, { value: value });
 		}
 	},

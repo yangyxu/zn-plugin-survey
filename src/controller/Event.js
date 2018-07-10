@@ -249,7 +249,7 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                                 return response.error('未查到该活动'), false;
                             }else {
                                 _values.table = data[0].table_name;
-                                _values.fields = "*, zn_plugin_survey_convert_openid(zn_plugin_wechat_open_id) as openid_convert"
+                                _values.fields = "*, zn_plugin_survey_convert_openid(zn_plugin_wechat_open_id) as openid_convert";
                                 return zn.sql.paging(_values);
                             }
                         }, function (err, data){
@@ -521,7 +521,9 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                     this.beginTransaction()
                         .query(zn.sql.paging({
                             table: 'zn_plugin_survey_event',
-                            where: _where
+                            where: _where,
+                            pageIndex: request.getValue('pageIndex'),
+                            pageSize: request.getValue('pageSize')
                         }), null, function (err, rows){
                             if(err){
                                 response.error(err);

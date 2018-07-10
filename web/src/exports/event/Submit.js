@@ -124,7 +124,7 @@ module.exports = React.createClass({
 					items={this.state.fields}
 					onSubmitBefore={this.__onSubmit}
 					buttons={[]} />
-				<zn.react.Button onClick={()=>this.refs.form.submit()} text="提交(SUBMIT)" icon="fa-pencil" status="warning" />
+				<zn.react.Button onClick={()=>this.refs.form.submit()} className="submit-btn" text="提交表单" icon="fa-pencil" status="warning" />
 			</div>
 		);
 	},
