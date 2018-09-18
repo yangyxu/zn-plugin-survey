@@ -523,7 +523,10 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                             table: 'zn_plugin_survey_event',
                             where: _where,
                             pageIndex: request.getValue('pageIndex'),
-                            pageSize: request.getValue('pageSize')
+                            pageSize: request.getValue('pageSize'),
+                            order: {
+                                zn_create_time: 'asc'
+                            }
                         }), null, function (err, rows){
                             if(err){
                                 response.error(err);
