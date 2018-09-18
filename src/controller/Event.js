@@ -525,7 +525,7 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                             pageIndex: request.getValue('pageIndex'),
                             pageSize: request.getValue('pageSize'),
                             order: {
-                                zn_create_time: 'asc'
+                                zn_create_time: 'desc'
                             }
                         }), null, function (err, rows){
                             if(err){
