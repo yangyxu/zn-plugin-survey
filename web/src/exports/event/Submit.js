@@ -76,8 +76,8 @@ module.exports = React.createClass({
 	__renderError: function (error){
 		return (
 			<div className="submit-error">
-				<div><i className="fa fa-check" /></div>
-				<div>{error}</div>
+				<div><i className="fa fa-frown-o" /></div>
+				<div dangerouslySetInnerHTML={{__html: error}}></div>
 			</div>
 		);
 	},
@@ -132,7 +132,7 @@ module.exports = React.createClass({
 		return (
 			<div className="submit-form">
 				<div className="success-tip" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'left' }}>
-					<i className="fa fa-check zr-padding-3" style={{fontSize: 32}} />
+					<i className="fa fa-smile-o zr-padding-3" />
 					<div dangerouslySetInnerHTML={{__html: this.state.event.success_message}} />
 				</div>
 				{!!this.state.event.show_count && <div className="count-info">还剩<span className="count">{this.state.event.max_count - this.state.event.count}</span>个名额</div>}
@@ -162,7 +162,7 @@ module.exports = React.createClass({
 				if(this.state.submited){
 					return <div>
 						<div className="success-tip" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'left' }}>
-							<i className="fa fa-check zr-padding-3" style={{fontSize: 32}} />
+							<i className="fa fa-smile-o zr-padding-3" />
 							<div dangerouslySetInnerHTML={{__html: this.state.event.success_message}} />
 						</div>
 						<zn.react.Button onClick={()=>this.setState({ submited: false })} text="返回(BACK)" icon="fa-angle-left" status="warning" />

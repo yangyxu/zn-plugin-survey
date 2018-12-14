@@ -1,5 +1,5 @@
 zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, node_officegen) {
-
+    
     return zn.Controller('event',{
         methods: {
             orderField: {
@@ -112,19 +112,19 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                             if(_event.start_time || _event.end_time){
                                 var _now = (new Date()).getTime();
                                 if(_now>(new Date(_event.end_time)).getTime()){
-                                    return response.error('活动已经结束'), false;
+                                    return response.error('报名结束了'), false;
                                 }
                                 if(_now<(new Date(_event.start_time)).getTime()){
-                                    return response.error('活动还没开始'), false;
+                                    return response.error('报名未开始'), false;
                                 }
                             }
 
                             if(!_data.event.table_generated){
-                                return response.error('活动还未发布'), false;
+                                return response.error('报名未发布'), false;
                             }
 
                             if(_data.event.count == _data.event.max_count){
-                                return response.error('活动提交已满'), false;
+                                return response.error(_data.event.error_message || '报名已满'), false;
                             }
 
                             return zn.sql.select({
@@ -187,11 +187,11 @@ zn.define(['node:chinese-to-pinyin', 'node:officegen'], function (node_pinyin, n
                             }
                             _value.event = data[0];
                             if(!_value.event.table_generated){
-                                return response.error('该活动还未发布'), false;
+                                return response.error('报名未发布'), false;
                             }
 
                             if(_value.event.count == _value.event.max_count){
-                                return response.error('该活动提交已满'), false;
+                                return response.error(_value.event.error_message||'报名已满'), false;
                             }
 
                             return zn.sql.select({

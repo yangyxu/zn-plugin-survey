@@ -1,5 +1,10 @@
 .zn-plugin-survey-event-submit{
 
+    .zr-button{
+        height: 36px !important;
+        font-weight: bolder !important;
+    }
+
     .inner-bg{
         z-index: -1;
         position: absolute;
@@ -30,22 +35,51 @@
         }
     }
     .submit-error{
-        background-color: #d9534f99;
+        background: #ee0979;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #ff6a00, #ee0979);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #ff6a00, #ee0979); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        box-shadow: 0 2px 8px rgba(0,0,0,.33);
+        border-radius: 5px;
+        font-size: 20px;
+        font-weight: 700;
         padding: 5px;
+        color: #FFF;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        .fa{
+            font-size: 40px;
+            padding: 20px;
+        }
+        div{
+            padding: 10px;
+            text-align: center;
+        }
     }
     .success-tip{
-        display: block;
-        text-align: center;
-        background-color: rgba(71, 181, 43, 0.7);
-        padding: 10px;
-        margin: 10px 0px;
-        font-size: 10px;
-        font-weight: bold;
-        border-radius: 2px;
+        background: #00b09b;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #96c93d, #00b09b);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #96c93d, #00b09b); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        box-shadow: 0 2px 8px rgba(0,0,0,.33);
+        border-radius: 5px;
+        font-size: 20px;
+        font-weight: 700;
+        padding: 5px;
+        color: #FFF;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 50px;
+        .fa{
+            font-size: 40px;
+            padding: 20px;
+        }
+        div{
+            padding: 10px;
+            text-align: center;
+        }
     }
     .submit-form{
 

@@ -82,13 +82,9 @@ module.exports = React.createClass({
 			React.createElement(
 				'div',
 				null,
-				React.createElement('i', { className: 'fa fa-check' })
+				React.createElement('i', { className: 'fa fa-frown-o' })
 			),
-			React.createElement(
-				'div',
-				null,
-				error
-			)
+			React.createElement('div', { dangerouslySetInnerHTML: { __html: error } })
 		);
 	},
 	__onSubmit: function __onSubmit(data) {
@@ -159,7 +155,7 @@ module.exports = React.createClass({
 			React.createElement(
 				'div',
 				{ className: 'success-tip', style: { display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'left' } },
-				React.createElement('i', { className: 'fa fa-check zr-padding-3', style: { fontSize: 32 } }),
+				React.createElement('i', { className: 'fa fa-smile-o zr-padding-3' }),
 				React.createElement('div', { dangerouslySetInnerHTML: { __html: this.state.event.success_message } })
 			),
 			!!this.state.event.show_count && React.createElement(
@@ -212,7 +208,7 @@ module.exports = React.createClass({
 						React.createElement(
 							'div',
 							{ className: 'success-tip', style: { display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'left' } },
-							React.createElement('i', { className: 'fa fa-check zr-padding-3', style: { fontSize: 32 } }),
+							React.createElement('i', { className: 'fa fa-smile-o zr-padding-3' }),
 							React.createElement('div', { dangerouslySetInnerHTML: { __html: this.state.event.success_message } })
 						),
 						React.createElement(zn.react.Button, { onClick: function onClick() {
