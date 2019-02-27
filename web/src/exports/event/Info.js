@@ -1,3 +1,4 @@
+require('./Info.less');
 var React = require('react');
 var QRCode = require('qrcode.react');
 
