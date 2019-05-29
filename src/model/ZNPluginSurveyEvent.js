@@ -13,6 +13,11 @@ zn.define(function () {
                 type: ['int', 11],
                 default: 0
             },
+            parent_id: {
+                value: null,
+                type: ['int', 11],
+                default: 0
+            },
             type_id: {
                 value: null,
                 type: ['int', 11],

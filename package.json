@@ -23,7 +23,7 @@
   "author": "yangyxu",
   "license": "MIT",
   "devDependencies": {
-    "zeanium-react-web": "^0.3.1"
+    "zeanium-react-web": "^0.4.0"
   },
   "dependencies": {
     "chinese-to-pinyin": "^0.1.6",
