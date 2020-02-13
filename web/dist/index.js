@@ -209,9 +209,9 @@ module.exports = React.createClass({
         icon: 'fa-plus',
         style: {
           marginRight: 8
-        } //{ text: '删除', name: 'remove', status: 'danger', icon: 'fa-remove', style: { marginRight: 5 } }
-
-      }]
+        }
+      } //{ text: '删除', name: 'remove', status: 'danger', icon: 'fa-remove', style: { marginRight: 5 } }
+      ]
     };
   },
   componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
@@ -270,6 +270,7 @@ module.exports = React.createClass({
         width: 80
       }
     }, React.createElement(zn.react.ProgressRing, {
+      key: item.count / item.max_count * 100,
       style: {
         margin: "0 auto"
       },
@@ -735,7 +736,8 @@ module.exports = React.createClass({
         style: {
           marginRight: 5
         }
-      }]
+      } //{ text: '删除', name: 'remove', status: 'danger', icon: 'fa-remove', style: { marginRight: 5 } }
+      ]
     };
   },
   componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
@@ -3469,7 +3471,8 @@ module.exports = React.createClass({
         style: {
           marginRight: 5
         }
-      }]
+      } //{ text: '删除', name: 'remove', status: 'danger', icon: 'fa-remove', style: { marginRight: 5 } }
+      ]
     };
   },
   componentDidMount: function componentDidMount() {},

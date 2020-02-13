@@ -63,7 +63,7 @@ module.exports = React.createClass({
 	__onItemRender: function (item){
 		return <div className="inner">
 			<div className="inner-left" style={{width: 80}}>
-				<zn.react.ProgressRing style={{margin: "0 auto"}} full={false} value={(item.count/item.max_count * 100).toFixed(1)} />
+				<zn.react.ProgressRing key={(item.count/item.max_count * 100)} style={{margin: "0 auto"}} full={false} value={(item.count/item.max_count * 100).toFixed(1)} />
 				{
 					!(item.status==0)?<span onClick={()=>this.__viewEventChart(item)} className="btn"><i className="fa fa-pie-chart zr-padding-3" />查看报表</span>:<span></span>
 				}
