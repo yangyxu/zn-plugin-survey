@@ -73,76 +73,76 @@ module.exports = React.createClass({
   __renderStatus: function __renderStatus(status) {
     switch (status) {
       case 0:
-        return React.createElement("span", null, "\u5F85\u53D1\u5E03");
+        return /*#__PURE__*/React.createElement("span", null, "\u5F85\u53D1\u5E03");
 
       case 1:
-        return React.createElement("span", null, "\u5DF2\u53D1\u5E03");
+        return /*#__PURE__*/React.createElement("span", null, "\u5DF2\u53D1\u5E03");
 
       case 2:
-        return React.createElement("span", null, "\u5DF2\u7ED3\u675F");
+        return /*#__PURE__*/React.createElement("span", null, "\u5DF2\u7ED3\u675F");
 
       case -1:
-        return React.createElement("span", null, "\u4E0B\u7EBF");
+        return /*#__PURE__*/React.createElement("span", null, "\u4E0B\u7EBF");
     }
   },
   __onItemRender: function __onItemRender(item) {
     var _this = this;
 
-    return React.createElement("div", {
+    return /*#__PURE__*/React.createElement("div", {
       className: "inner"
-    }, React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("div", {
       className: "inner-left",
       style: {
         width: 80
       }
-    }, React.createElement(zn.react.ProgressRing, {
+    }, /*#__PURE__*/React.createElement(zn.react.ProgressRing, {
       style: {
         padding: 10
       },
       full: false,
       value: 35
-    })), React.createElement("div", {
+    })), /*#__PURE__*/React.createElement("div", {
       className: "inner-right"
-    }, React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("div", {
       className: "r-header"
-    }, React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("span", {
       className: "name",
       onClick: function onClick() {
         return zn.react.session.relativeJump('/znpluginsurvey.paper.info', {
           znid: item.zn_id
         });
       }
-    }, item.zn_title), React.createElement("span", {
+    }, item.zn_title), /*#__PURE__*/React.createElement("span", {
       className: "h-tag"
-    }, this.__renderStatus(item.status)), React.createElement("i", {
+    }, this.__renderStatus(item.status)), /*#__PURE__*/React.createElement("i", {
       "data-tooltip": "\u4FEE\u6539\u4FE1\u606F",
       onClick: function onClick() {
         return _this.__updateItem(item);
       },
       className: "fa fa-edit h-btn"
-    })), React.createElement("div", {
+    })), /*#__PURE__*/React.createElement("div", {
       className: "r-item"
-    }, React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("span", {
       className: "_key"
-    }, "\u6700\u5927\u9650\u5236"), React.createElement("span", {
+    }, "\u6700\u5927\u9650\u5236"), /*#__PURE__*/React.createElement("span", {
       className: "h-tag"
-    }, item.max_count)), React.createElement("div", {
+    }, item.max_count)), /*#__PURE__*/React.createElement("div", {
       className: "r-item"
-    }, React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("span", {
       className: "_key"
-    }, "\u9884\u8BA1\u5468\u671F\uFF1A"), React.createElement("span", {
+    }, "\u9884\u8BA1\u5468\u671F\uFF1A"), /*#__PURE__*/React.createElement("span", {
       className: "_value"
-    }, (item.start_time || '').toString().split(' ')[0], " ~ ", (item.end_time || '').toString().split(' ')[0])), React.createElement("div", {
+    }, (item.start_time || '').toString().split(' ')[0], " ~ ", (item.end_time || '').toString().split(' ')[0])), /*#__PURE__*/React.createElement("div", {
       className: "r-item"
-    }, React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("span", {
       className: "_key"
-    }, "\u521B\u5EFA\u65F6\u95F4\uFF1A"), React.createElement("span", {
+    }, "\u521B\u5EFA\u65F6\u95F4\uFF1A"), /*#__PURE__*/React.createElement("span", {
       className: "_value"
-    }, item.zn_create_time)), React.createElement("div", {
+    }, item.zn_create_time)), /*#__PURE__*/React.createElement("div", {
       className: "r-item"
-    }, React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("span", {
       className: "_key"
-    }, "\u5907\u6CE8\uFF1A"), React.createElement("span", {
+    }, "\u5907\u6CE8\uFF1A"), /*#__PURE__*/React.createElement("span", {
       className: "_value"
     }, item.comment))));
   },
@@ -152,7 +152,7 @@ module.exports = React.createClass({
   __addItem: function __addItem() {
     zn.dialog({
       title: '新增问卷',
-      content: React.createElement(zn.react.Form, {
+      content: /*#__PURE__*/React.createElement(zn.react.Form, {
         action: "/zn.plugin.admin/model/insert",
         merge: "values",
         hiddens: {
@@ -171,7 +171,7 @@ module.exports = React.createClass({
     console.log(data);
     zn.dialog({
       title: '更新问卷',
-      content: React.createElement(zn.react.Form, {
+      content: /*#__PURE__*/React.createElement(zn.react.Form, {
         merge: "updates",
         action: "/zn.plugin.admin/model/update",
         exts: {
@@ -226,13 +226,13 @@ module.exports = React.createClass({
     }
   },
   render: function render() {
-    return React.createElement(zn.react.Page, {
+    return /*#__PURE__*/React.createElement(zn.react.Page, {
       canBack: false,
       className: "zn-plugin-survey-paper-list",
       title: "\u95EE\u5377\u5217\u8868",
       toolbarItems: this.props.data ? this.state.toolbarItems : [],
       onToolbarClick: this.__onToolbarClick,
-      headerCenter: React.createElement(zn.react.ListView, {
+      headerCenter: /*#__PURE__*/React.createElement(zn.react.ListView, {
         className: "zr-tab-ios",
         selectMode: "radio",
         valueKey: "status",
@@ -249,7 +249,7 @@ module.exports = React.createClass({
           text: '已结束'
         }]
       })
-    }, React.createElement(zn.react.PagerView, {
+    }, /*#__PURE__*/React.createElement(zn.react.PagerView, {
       view: "ListView",
       className: "projects",
       data: this.state.data,

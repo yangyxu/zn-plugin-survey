@@ -65,14 +65,14 @@ module.exports = React.createClass({
     };
   },
   __rightRender: function __rightRender(data) {
-    return React.createElement(PaperList, {
+    return /*#__PURE__*/React.createElement(PaperList, {
       data: data
     });
   },
   render: function render() {
-    return React.createElement(zn.plugin.admin.TreeModelView, _extends({}, this.props, {
+    return /*#__PURE__*/React.createElement(zn.plugin.admin.TreeModelView, _extends({}, this.props, {
       emptyRender: function emptyRender() {
-        return React.createElement(PaperList, null);
+        return /*#__PURE__*/React.createElement(PaperList, null);
       },
       rightRender: this.__rightRender,
       leftWidth: 160

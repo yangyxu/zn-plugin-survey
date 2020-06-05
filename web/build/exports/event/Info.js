@@ -156,7 +156,7 @@ module.exports = React.createClass({
   __addItem: function __addItem() {
     zn.dialog({
       title: '添加字段',
-      content: React.createElement(zn.react.Form, {
+      content: /*#__PURE__*/React.createElement(zn.react.Form, {
         hiddens: {
           zn_id: zn.uuid(),
           event_id: this.state.event.id,
@@ -170,7 +170,7 @@ module.exports = React.createClass({
   __updateItem: function __updateItem(data) {
     zn.dialog({
       title: '更新字段',
-      content: React.createElement(zn.react.Form, {
+      content: /*#__PURE__*/React.createElement(zn.react.Form, {
         merge: "updates",
         action: "/zn.plugin.admin/model/update",
         exts: {
@@ -284,31 +284,31 @@ module.exports = React.createClass({
     }
 
     item.type = item.type.split('_')[0];
-    return React.createElement("li", {
+    return /*#__PURE__*/React.createElement("li", {
       className: "field"
-    }, React.createElement(zn.react.FormItem, _extends({}, item, {
+    }, /*#__PURE__*/React.createElement(zn.react.FormItem, _extends({}, item, {
       className: "column"
-    })), React.createElement("div", {
+    })), /*#__PURE__*/React.createElement("div", {
       className: "action"
-    }, index != 0 && React.createElement("i", {
+    }, index != 0 && /*#__PURE__*/React.createElement("i", {
       onClick: function onClick() {
         return _this.__upItem(item);
       },
       "data-tooltip": "\u4E0A\u79FB",
       className: "fa fa-angle-up"
-    }), index != this.state.fields.length - 1 && React.createElement("i", {
+    }), index != this.state.fields.length - 1 && /*#__PURE__*/React.createElement("i", {
       onClick: function onClick() {
         return _this.__downItem(item);
       },
       "data-tooltip": "\u4E0B\u79FB",
       className: "fa fa-angle-down"
-    }), React.createElement("i", {
+    }), /*#__PURE__*/React.createElement("i", {
       onClick: function onClick() {
         return _this.__updateItem(item);
       },
       "data-tooltip": "\u4FEE\u6539\u5B57\u6BB5",
       className: "fa fa-edit"
-    }), React.createElement("i", {
+    }), /*#__PURE__*/React.createElement("i", {
       onClick: function onClick() {
         return _this.__removeItem(item);
       },
@@ -322,77 +322,77 @@ module.exports = React.createClass({
   render: function render() {
     var _this2 = this;
 
-    return React.createElement(zn.react.Page, {
+    return /*#__PURE__*/React.createElement(zn.react.Page, {
       className: "zn-plugin-survey-event-info",
       title: "\u6D3B\u52A8\u8BE6\u60C5"
-    }, this.state.event && React.createElement("div", {
+    }, this.state.event && /*#__PURE__*/React.createElement("div", {
       className: "inner info"
-    }, !!this.state.event.status && React.createElement("div", {
+    }, !!this.state.event.status && /*#__PURE__*/React.createElement("div", {
       className: "inner-left qr-code",
       style: {
         width: 138
       }
-    }, React.createElement(QRCode, {
+    }, /*#__PURE__*/React.createElement(QRCode, {
       value: window.location.origin + window.location.pathname.replace('admin.html', 'index.html') + "#/znpluginsurvey.event.submit?znid=" + this.state.event.zn_id
-    }), React.createElement("a", {
+    }), /*#__PURE__*/React.createElement("a", {
       className: "btn",
       onClick: function onClick() {
         return zn.react.copyToClipboard(window.location.origin + window.location.pathname.replace('admin.html', 'index.html') + "#/znpluginsurvey.event.submit?znid=" + _this2.state.event.zn_id);
       }
-    }, React.createElement("i", {
+    }, /*#__PURE__*/React.createElement("i", {
       className: "fa fa-copy"
-    }), "\u590D\u5236\u94FE\u63A5")), React.createElement("div", {
+    }), "\u590D\u5236\u94FE\u63A5")), /*#__PURE__*/React.createElement("div", {
       className: "inner-right base-items"
-    }, React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("div", {
       className: "r-header"
-    }, React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("span", {
       className: "name"
-    }, this.state.event.zn_title), React.createElement("span", {
+    }, this.state.event.zn_title), /*#__PURE__*/React.createElement("span", {
       className: "h-tag zr-fr"
-    }, "\u6700\u8FD1\u4E00\u6B21\u62A5\u540D\u65F6\u95F4\uFF1A", this.state.event.zn_modify_time)), React.createElement("div", {
+    }, "\u6700\u8FD1\u4E00\u6B21\u62A5\u540D\u65F6\u95F4\uFF1A", this.state.event.zn_modify_time)), /*#__PURE__*/React.createElement("div", {
       className: "r-item"
-    }, React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("span", {
       className: "_key"
-    }, "\u5F53\u524D\u8FDB\u5EA6"), React.createElement("span", {
+    }, "\u5F53\u524D\u8FDB\u5EA6"), /*#__PURE__*/React.createElement("span", {
       className: "h-tag"
-    }, this.state.event.count, " / ", this.state.event.max_count)), React.createElement("div", {
+    }, this.state.event.count, " / ", this.state.event.max_count)), /*#__PURE__*/React.createElement("div", {
       className: "r-item"
-    }, React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("span", {
       className: "_key"
-    }, "\u9884\u8BA1\u5468\u671F\uFF1A"), React.createElement("span", {
+    }, "\u9884\u8BA1\u5468\u671F\uFF1A"), /*#__PURE__*/React.createElement("span", {
       className: "_value"
-    }, (this.state.event.start_time || '').toString().split(' ')[0], " ~ ", (this.state.event.end_time || '').toString().split(' ')[0])), React.createElement("div", {
+    }, (this.state.event.start_time || '').toString().split(' ')[0], " ~ ", (this.state.event.end_time || '').toString().split(' ')[0])), /*#__PURE__*/React.createElement("div", {
       className: "r-item"
-    }, React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("span", {
       className: "_key"
-    }, "\u521B\u5EFA\u65F6\u95F4\uFF1A"), React.createElement("span", {
+    }, "\u521B\u5EFA\u65F6\u95F4\uFF1A"), /*#__PURE__*/React.createElement("span", {
       className: "_value"
-    }, this.state.event.zn_create_time)), React.createElement("div", {
+    }, this.state.event.zn_create_time)), /*#__PURE__*/React.createElement("div", {
       className: "r-item"
-    }, React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("span", {
       className: "_key"
-    }, "\u5907\u6CE8\uFF1A"), React.createElement("span", {
+    }, "\u5907\u6CE8\uFF1A"), /*#__PURE__*/React.createElement("span", {
       className: "_value"
-    }, this.state.event.comment)))), this.state.event && React.createElement("div", {
+    }, this.state.event.comment)))), this.state.event && /*#__PURE__*/React.createElement("div", {
       className: "event-fields",
       style: {
         color: this.state.event.text_color,
         width: 414,
         margin: '0 auto'
       }
-    }, this.state.event.background_image && React.createElement("img", {
+    }, this.state.event.background_image && /*#__PURE__*/React.createElement("img", {
       className: "background-image",
       src: this.state.event.background_image
-    }), React.createElement("div", {
+    }), /*#__PURE__*/React.createElement("div", {
       className: "content"
-    }, React.createElement(zn.react.Button, {
+    }, /*#__PURE__*/React.createElement(zn.react.Button, {
       onClick: this.__addItem,
       text: "\u6DFB\u52A0\u5B57\u6BB5",
       status: "warning",
       icon: "fa-plus"
-    }), !!this.state.fields.length ? React.createElement("ul", {
+    }), !!this.state.fields.length ? /*#__PURE__*/React.createElement("ul", {
       className: "fields"
-    }, this.state.fields.map(this.__itemRender)) : React.createElement("span", {
+    }, this.state.fields.map(this.__itemRender)) : /*#__PURE__*/React.createElement("span", {
       className: "zr-tip"
     }, "\u6682\u65F6\u6CA1\u6709\u5B57\u6BB5"))));
   }

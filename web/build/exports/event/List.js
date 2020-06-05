@@ -7,7 +7,7 @@ var EventList = require('../../component/EventList.js');
 module.exports = React.createClass({
   displayName: "exports",
   render: function render() {
-    return React.createElement(EventList, {
+    return /*#__PURE__*/React.createElement(EventList, {
       canBack: true,
       type: this.props.request.search.type
     });

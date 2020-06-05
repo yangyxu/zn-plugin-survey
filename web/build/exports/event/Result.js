@@ -75,7 +75,7 @@ module.exports = React.createClass({
   __addItem: function __addItem() {
     zn.dialog({
       title: '新增用户',
-      content: React.createElement(zn.react.Form, {
+      content: /*#__PURE__*/React.createElement(zn.react.Form, {
         action: "/zn.plugin.admin/model/insert",
         merge: "values",
         exts: {
@@ -136,12 +136,12 @@ module.exports = React.createClass({
       if (value && value.split) {
         var _value = value.split('&&__zn__&&');
 
-        return React.createElement("div", {
+        return /*#__PURE__*/React.createElement("div", {
           style: {
             display: 'flex',
             alignItems: 'center'
           }
-        }, _value[1] && React.createElement("img", {
+        }, _value[1] && /*#__PURE__*/React.createElement("img", {
           className: "avatar",
           style: {
             width: 16,
@@ -150,7 +150,7 @@ module.exports = React.createClass({
             borderRadius: 16
           },
           src: _value[1]
-        }), React.createElement("a", {
+        }), /*#__PURE__*/React.createElement("a", {
           onClick: function onClick() {
             return zn.react.session.relativeJump('/znpluginwechat.user.info', {
               openid: data.zn_plugin_wechat_open_id
@@ -164,17 +164,17 @@ module.exports = React.createClass({
       case 'FileUploader':
       case 'ImageUploader':
       case 'Images':
-        return React.createElement(zn.react.Files, {
+        return /*#__PURE__*/React.createElement(zn.react.Files, {
           value: value
         });
     }
   },
   render: function render() {
-    return React.createElement(zn.react.Page, {
+    return /*#__PURE__*/React.createElement(zn.react.Page, {
       title: this.state.event ? this.state.event.zn_title : "活动报表",
       toolbarItems: this.state.toolbarItems,
       onToolbarClick: this.__onToolbarClick
-    }, this.state.event ? React.createElement(zn.react.PagerView, {
+    }, this.state.event ? /*#__PURE__*/React.createElement(zn.react.PagerView, {
       ref: "table",
       view: "Table",
       enableFilter: true,
@@ -183,7 +183,7 @@ module.exports = React.createClass({
       columnRender: this.__onTableColumnRender,
       data: this.state.data,
       items: this.state.fields
-    }) : React.createElement(zn.react.DataLoader, {
+    }) : /*#__PURE__*/React.createElement(zn.react.DataLoader, {
       content: "\u52A0\u8F7D\u4E2D...",
       loader: "timer"
     }));

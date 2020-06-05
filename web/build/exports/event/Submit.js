@@ -86,11 +86,11 @@ module.exports = React.createClass({
     });
   },
   __renderError: function __renderError(error) {
-    return React.createElement("div", {
+    return /*#__PURE__*/React.createElement("div", {
       className: "submit-error"
-    }, React.createElement("div", null, React.createElement("i", {
+    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("i", {
       className: "fa fa-frown-o"
-    })), React.createElement("div", {
+    })), /*#__PURE__*/React.createElement("div", {
       dangerouslySetInnerHTML: {
         __html: error
       }
@@ -132,13 +132,13 @@ module.exports = React.createClass({
   __renderForm: function __renderForm() {
     var _this = this;
 
-    return React.createElement("div", {
+    return /*#__PURE__*/React.createElement("div", {
       className: "submit-form"
-    }, !!this.state.event.show_count && React.createElement("div", {
+    }, !!this.state.event.show_count && /*#__PURE__*/React.createElement("div", {
       className: "count-info"
-    }, "\u8FD8\u5269", React.createElement("span", {
+    }, "\u8FD8\u5269", /*#__PURE__*/React.createElement("span", {
       className: "count"
-    }, this.state.event.max_count - this.state.event.count), "\u4E2A\u540D\u989D"), React.createElement(zn.react.Form, {
+    }, this.state.event.max_count - this.state.event.count), "\u4E2A\u540D\u989D"), /*#__PURE__*/React.createElement(zn.react.Form, {
       ref: "form",
       merge: "data",
       className: "form",
@@ -147,7 +147,7 @@ module.exports = React.createClass({
       items: this.state.fields,
       onSubmitBefore: this.__onSubmit,
       buttons: []
-    }), React.createElement(zn.react.Button, {
+    }), /*#__PURE__*/React.createElement(zn.react.Button, {
       onClick: function onClick() {
         return _this.refs.form.submit();
       },
@@ -158,9 +158,9 @@ module.exports = React.createClass({
     }));
   },
   __renderResult: function __renderResult() {
-    return React.createElement("div", {
+    return /*#__PURE__*/React.createElement("div", {
       className: "submit-form"
-    }, React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("div", {
       className: "success-tip",
       style: {
         display: 'flex',
@@ -169,24 +169,24 @@ module.exports = React.createClass({
         alignItems: 'center',
         textAlign: 'left'
       }
-    }, React.createElement("i", {
+    }, /*#__PURE__*/React.createElement("i", {
       className: "fa fa-smile-o zr-padding-3"
-    }), React.createElement("div", {
+    }), /*#__PURE__*/React.createElement("div", {
       dangerouslySetInnerHTML: {
         __html: this.state.event.success_message
       }
-    })), !!this.state.event.show_count && React.createElement("div", {
+    })), !!this.state.event.show_count && /*#__PURE__*/React.createElement("div", {
       className: "count-info"
-    }, "\u8FD8\u5269", React.createElement("span", {
+    }, "\u8FD8\u5269", /*#__PURE__*/React.createElement("span", {
       className: "count"
-    }, this.state.event.max_count - this.state.event.count), "\u4E2A\u540D\u989D"), React.createElement("ul", {
+    }, this.state.event.max_count - this.state.event.count), "\u4E2A\u540D\u989D"), /*#__PURE__*/React.createElement("ul", {
       className: "field-value"
     }, this.state.data.map(function (item, index) {
-      return React.createElement("li", {
+      return /*#__PURE__*/React.createElement("li", {
         className: "field-item"
-      }, React.createElement("span", {
+      }, /*#__PURE__*/React.createElement("span", {
         className: "fi-title"
-      }, item.title), React.createElement("span", {
+      }, item.title), /*#__PURE__*/React.createElement("span", {
         className: "fi-value"
       }, item.value));
     })));
@@ -203,7 +203,7 @@ module.exports = React.createClass({
         return this.__renderResult();
       } else {
         if (this.state.submited) {
-          return React.createElement("div", null, React.createElement("div", {
+          return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
             className: "success-tip",
             style: {
               display: 'flex',
@@ -212,13 +212,13 @@ module.exports = React.createClass({
               alignItems: 'center',
               textAlign: 'left'
             }
-          }, React.createElement("i", {
+          }, /*#__PURE__*/React.createElement("i", {
             className: "fa fa-smile-o zr-padding-3"
-          }), React.createElement("div", {
+          }), /*#__PURE__*/React.createElement("div", {
             dangerouslySetInnerHTML: {
               __html: this.state.event.success_message
             }
-          })), React.createElement(zn.react.Button, {
+          })), /*#__PURE__*/React.createElement(zn.react.Button, {
             onClick: function onClick() {
               return _this2.setState({
                 submited: false
@@ -236,25 +236,25 @@ module.exports = React.createClass({
       return this.__renderForm();
     }
 
-    return React.createElement(zn.react.DataLoader, {
+    return /*#__PURE__*/React.createElement(zn.react.DataLoader, {
       content: "\u52A0\u8F7D\u6570\u636E\u4E2D...",
       loader: "timer"
     });
   },
   render: function render() {
-    return React.createElement("div", {
+    return /*#__PURE__*/React.createElement("div", {
       className: "zn-plugin-survey-event-submit",
       style: {
         color: this.state.event ? this.state.event.text_color : null
       }
-    }, this.state.event && React.createElement("img", {
+    }, this.state.event && /*#__PURE__*/React.createElement("img", {
       className: "inner-bg",
       src: zn.http.fixURL(this.state.event.background_image)
-    }), React.createElement("div", {
+    }), /*#__PURE__*/React.createElement("div", {
       className: "inner-content"
-    }, this.state.event && React.createElement("div", {
+    }, this.state.event && /*#__PURE__*/React.createElement("div", {
       className: "inner-title"
-    }, this.state.event.zn_title), this.__renderContent(), this.state.event && React.createElement("div", {
+    }, this.state.event.zn_title), this.__renderContent(), this.state.event && /*#__PURE__*/React.createElement("div", {
       className: "footer-title"
     }, this.state.event.footer_title)));
   }

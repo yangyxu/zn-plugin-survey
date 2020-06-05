@@ -65,14 +65,14 @@ module.exports = React.createClass({
     };
   },
   __rightRender: function __rightRender(data) {
-    return React.createElement(EventList, {
+    return /*#__PURE__*/React.createElement(EventList, {
       type: data.value
     });
   },
   render: function render() {
-    return React.createElement(zn.plugin.admin.TreeModelView, _extends({}, this.props, {
+    return /*#__PURE__*/React.createElement(zn.plugin.admin.TreeModelView, _extends({}, this.props, {
       emptyRender: function emptyRender() {
-        return React.createElement(EventList, null);
+        return /*#__PURE__*/React.createElement(EventList, null);
       },
       rightRender: this.__rightRender,
       leftWidth: 160
