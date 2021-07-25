@@ -30,6 +30,6 @@
     "chinese-to-pinyin": "^0.1.6",
     "officegen": "^0.4.5",
     "qrcode.react": "^0.7.2",
-    "xlsx": "^0.11.7"
+    "xlsx": "^0.17.0"
   }
 }
